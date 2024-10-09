@@ -1,0 +1,50 @@
+.container {
+    max-width: 800px; /* Limita a largura da página */
+    margin: 0 auto; /* Centraliza a página */
+    padding: 20px; /* Adiciona espaço ao redor do conteúdo */
+}
+
+h1 {
+    text-align: center; /* Centraliza o título */
+}
+
+table {
+    width: 100%; /* Largura total da tabela */
+    border-collapse: collapse; /* Remove espaços entre as bordas das células */
+    margin-top: 20px; /* Espaçamento acima da tabela */
+}
+
+th, td {
+    border: 1px solid #ddd; /* Borda das células */
+    padding: 10px; /* Espaçamento interno das células */
+    text-align: left; /* Alinhamento do texto à esquerda */
+}
+
+th {
+    background-color: #f2f2f2; /* Cor de fundo do cabeçalho */
+    font-weight: bold; /* Negrito para o texto do cabeçalho */
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Cor de fundo alternada para linhas pares */
+}
+
+tr:hover {
+    background-color: #f1f1f1; /* Cor de fundo ao passar o mouse sobre a linha */
+}
+
+.btn {
+    background-color: #4CAF50; /* Cor de fundo do botão */
+    color: white; /* Cor do texto do botão */
+    padding: 10px 15px; /* Espaçamento interno do botão */
+    border: none; /* Remove borda do botão */
+    border-radius: 5px; /* Bordas arredondadas */
+    cursor: pointer; /* Cursor de mão ao passar sobre o botão */
+    margin: 20px 0; /* Espaço acima e abaixo do botão */
+    display: block; /* Faz o botão ocupar toda a largura disponível */
+    text-align: center; /* Centraliza o texto do botão */
+}
+
+.btn:hover {
+    background-color: #45a049; /* Cor do botão ao passar o mouse */
+}

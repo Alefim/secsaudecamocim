@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Cadastro Salvo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Editar Cadastro Salvo</h1>
+        
+        <p>Selecione um cadastro para editar:</p>
+        <select id="selectCadastroEditar">
+            <option value="">Selecione um cadastro...</option>
+            <!-- Os cadastros disponíveis devem ser preenchidos aqui com JavaScript -->
+        </select>
+
+        <form id="formEditarCadastro" style="display:none;">
+            <div class="form-group">
+                <label for="nomePaciente">Nome do Paciente:</label>
+                <input type="text" id="nomePaciente" name="nomePaciente" required>
+            </div>
+
+            <div class="form-group">
+                <label for="dataAgendamento">Data de Agendamento:</label>
+                <input type="date" id="dataAgendamento" name="dataAgendamento" required>
+            </div>
+
+            <div class="form-group">
+                <label for="horario">Horário:</label>
+                <input type="time" id="horario" name="horario" required>
+            </div>
+
+            <div class="form-group">
+                <label for="motorista">Motorista:</label>
+                <input type="text" id="motorista" name="motorista" required>
+            </div>
+
+            <div class="form-group">
+                <label for="especialidade">Especialidade:</label>
+                <input type="text" id="especialidade" name="especialidade" required>
+            </div>
+
+            <div class="form-group">
+                <label for="tipoCarro">Tipo de Carro:</label>
+                <input type="text" id="tipoCarro" name="tipoCarro" required>
+            </div>
+
+            <div class="form-group">
+                <label for="local">Local:</label>
+                <input type="text" id="local" name="local" required>
+            </div>
+
+            <div class="form-group">
+                <label for="acompanhante">Acompanhante:</label>
+                <input type="text" id="acompanhante" name="acompanhante">
+            </div>
+
+            <div class="form-group">
+                <label for="retorno">Retorno (Sim/Não):</label>
+                <select id="retorno" name="retorno" required>
+                    <option value="Sim">Sim</option>
+                    <option value="Não">Não</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn small">Salvar Edição</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Suponha que você tenha uma função para obter os cadastros salvos e preencher o select
+        function carregarCadastros() {
+            // Aqui você deve buscar os dados do Google Sheets ou outra fonte
+            const cadastros = [
+                // Exemplo de cadastros que poderiam vir do Google Sheets
+                { id: 1, nome: "João da Silva", data: "2024-10-10", horario: "14:00", motorista: "Carlos", especialidade: "Cardiologia", tipoCarro: "Sedan", local: "Hospital A", acompanhante: "Maria", retorno: "Sim" },
+                { id: 2, nome: "Ana Santos", data: "2024-10-11", horario: "09:00", motorista: "Roberto", especialidade: "Pediatria", tipoCarro: "Van", local: "Hospital B", acompanhante: "", retorno: "Não" }
+                // Adicione mais cadastros conforme necessário
+            ];
+
+            const select = document.getElementById('selectCadastroEditar');
+            cadastros.forEach(cadastro => {
+                const option = document.createElement('option');
+                option.value = cadastro.id; // id do cadastro
+                option.textContent = `${cadastro.nome} - ${cadastro.data}`;
+                select.appendChild(option);
+            });
+        }
+
+        // Quando um cadastro é selecionado, preenche o formulário com os dados
+        document.getElementById('selectCadastroEditar').addEventListener('change', function() {
+            const id = this.value;
+
+            // Aqui você deve buscar os dados do cadastro selecionado
+            // Usando o mesmo array de exemplo para simplicidade
+            const cadastros = [
+                { id: 1, nome: "João da Silva", data: "2024-10-10", horario: "14:00", motorista: "Carlos", especialidade: "Cardiologia", tipoCarro: "Sedan", local: "Hospital A", acompanhante: "Maria", retorno: "Sim" },
+                { id: 2, nome: "Ana Santos", data: "2024-10-11", horario: "09:00", motorista: "Roberto", especialidade: "Pediatria", tipoCarro: "Van", local: "Hospital B", acompanhante: "", retorno: "Não" }
+            ];
+
+            const cadastroSelecionado = cadastros.find(cadastro => cadastro.id == id);
+            if (cadastroSelecionado) {
+                // Preencher os campos do formulário
+                document.getElementById('nomePaciente').value = cadastroSelecionado.nome;
+                document.getElementById('dataAgendamento').value = cadastroSelecionado.data;
+                document.getElementById('horario').value = cadastroSelecionado.horario;
+                document.getElementById('motorista').value = cadastroSelecionado.motorista;
+                document.getElementById('especialidade').value = cadastroSelecionado.especialidade;
+                document.getElementById('tipoCarro').value = cadastroSelecionado.tipoCarro;
+                document.getElementById('local').value = cadastroSelecionado.local;
+                document.getElementById('acompanhante').value = cadastroSelecionado.acompanhante;
+                document.getElementById('retorno').value = cadastroSelecionado.retorno;
+
+                // Exibir o formulário
+                document.getElementById('formEditarCadastro').style.display = 'block';
+            } else {
+                // Limpar o formulário se nada for selecionado
+                document.getElementById('formEditarCadastro').reset();
+                document.getElementById('formEditarCadastro').style.display = 'none';
+            }
+        });
+
+        // Lógica para salvar as edições (adapte conforme necessário)
+        document.getElementById('formEditarCadastro').addEventListener('submit', function(e) {
+            e.preventDefault(); // Previne o comportamento padrão do formulário
+
+            // Captura os dados do formulário
+            const formData = new FormData(this);
+            const id = document.getElementById('selectCadastroEditar').value;
+
+            // Envie os dados para seu Google Apps Script ou API
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwX9C-bdLq1TMjqOiQceRDu-UK3z1E_fG0GNmUt1i3o93P8pTwZ0wRnrWDCB4-HMP3A/exec'; // Altere para o seu URL
+            fetch(scriptURL, { method: 'POST', body: formData })
+                .then(response => response.text())
+                .then(result => {
+                    alert(result); // Mostra mensagem de sucesso
+                    // Limpar o formulário após o envio
+                    document.getElementById('formEditarCadastro').reset();
+                    document.getElementById('formEditarCadastro').style.display = 'none';
+                    carregarCadastros(); // Recarrega os cadastros após a edição
+                })
+                .catch(error => {
+                    console.error('Erro ao salvar edição:', error);
+                    alert('Ocorreu um erro ao salvar a edição.');
+                });
+        });
+
+        // Carregar os cadastros ao abrir a página
+        window.onload = carregarCadastros;
+    </script>
+</body>
+</html>

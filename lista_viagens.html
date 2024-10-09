@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Viagens</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Filtrar Viagens por Data</h1>
+
+        <!-- Campo de data para o filtro -->
+        <label for="dataInicio">Data Início:</label>
+        <input type="date" id="dataInicio" name="dataInicio">
+
+        <label for="dataFim">Data Fim:</label>
+        <input type="date" id="dataFim" name="dataFim">
+
+        <!-- Botão para aplicar o filtro -->
+        <button onclick="filtrarViagens()">Filtrar Viagens</button>
+
+        <!-- Tabela para exibir as viagens -->
+        <h2>Lista de Viagens</h2>
+        <table id="tabelaViagens">
+            <thead>
+                <tr>
+                    <th>Nome do Paciente</th>
+                    <th>Data de Agendamento</th>
+                    <th>Horário</th>
+                    <th>Motorista</th>
+                    <th>Especialidade</th>
+                    <th>Tipo de Carro</th>
+                    <th>Local</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Linhas das viagens serão adicionadas aqui -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="lista_viagens.js"></script>
+</body>
+</html>

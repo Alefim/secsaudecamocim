@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizar Cadastros Salvos</title>
+    <link rel="stylesheet" href="styles1.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Cadastros Salvos</h1>
+        
+        <button class="btn" id="voltar">Voltar para Cadastro</button>
+        
+        <table id="tabelaCadastros">
+            <thead>
+                <tr>
+                    <th>Nome do Paciente</th>
+                    <th>Data de Agendamento</th>
+                    <th>Horário</th>
+                    <th>Motorista</th>
+                    <th>Especialidade</th>
+                    <th>Tipo de Carro</th>
+                    <th>Local</th>
+                    <th>Acompanhante</th>
+                    <th>Retorno</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Os dados serão inseridos aqui -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbx92cuAQ2irJz4MfWRP-sHd2LefxD6YOCfX89F7rqSP-ft6ccUx92axr2_kq8RVZkO0/exec'; // Substitua pelo seu URL
+
+            fetch(scriptURL)
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.querySelector('#tabelaCadastros tbody');
+                    tbody.innerHTML = ''; // Limpa o conteúdo anterior
+
+                    // Percorre os dados e adiciona à tabela
+                    data.forEach(row => {
+                        const tr = document.createElement('tr');
+                        row.forEach(cell => {
+                            const td = document.createElement('td');
+                            td.textContent = cell;
+                            tr.appendChild(td);
+                        });
+                        tbody.appendChild(tr);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar dados:', error);
+                    alert('Ocorreu um erro ao buscar os dados.');
+                });
+            
+            // Botão de voltar
+            document.getElementById('voltar').addEventListener('click', function() {
+                window.location.href = 'index.html'; // Substitua pelo nome da sua página de cadastro
+            });
+        });
+    </script>
+</body>
+</html>

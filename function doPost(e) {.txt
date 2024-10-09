@@ -1,0 +1,10 @@
+function doPost(e) {
+  if (typeof e !== 'undefined') {
+    var sheet = SpreadsheetApp.openById('1FpM_LuXYxzSgJYwk3D8daxCvgEixja9JRm1gA1sGJkQ').getActiveSheet();
+    var params = e.parameter;
+    sheet.appendRow([params.name, params.email, params.departureDate, params.returnDate, params.destination, params.accompaniedBy, params.contact, params.cpf, params.driver]);
+    return ContentService.createTextOutput('Success').setMimeType(ContentService.MimeType.TEXT);
+  } else {
+    return ContentService.createTextOutput('No parameters received').setMimeType(ContentService.MimeType.TEXT);
+  }
+}

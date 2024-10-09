@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Viagem</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Cadastro de Viagem</h1>
+        
+        <form id="formCadastro">
+            <div class="form-group">
+                <label for="nomePaciente">Nome do Paciente:</label>
+                <input type="text" id="nomePaciente" name="nomePaciente" required>
+            </div>
+
+            <div class="form-group">
+                <label for="dataAgendamento">Data de Agendamento:</label>
+                <input type="date" id="dataAgendamento" name="dataAgendamento" required>
+            </div>
+
+            <div class="form-group">
+                <label for="horario">Horário:</label>
+                <input type="time" id="horario" name="horario" required>
+            </div>
+
+            <div class="form-group">
+                <label for="motorista">Motorista:</label>
+                <input type="text" id="motorista" name="motorista" required>
+            </div>
+
+            <div class="form-group">
+                <label for="especialidade">Especialidade:</label>
+                <input type="text" id="especialidade" name="especialidade" required>
+            </div>
+
+            <div class="form-group">
+                <label for="tipoCarro">Tipo de Carro:</label>
+                <input type="text" id="tipoCarro" name="tipoCarro" required>
+            </div>
+
+            <div class="form-group">
+                <label for="local">Local:</label>
+                <input type="text" id="local" name="local" required>
+            </div>
+
+            <div class="form-group">
+                <label for="acompanhante">Acompanhante:</label>
+                <input type="text" id="acompanhante" name="acompanhante">
+            </div>
+
+            <div class="form-group">
+                <label for="retorno">Retorno (Sim/Não):</label>
+                <select id="retorno" name="retorno" required>
+                    <option value="Sim">Sim</option>
+                    <option value="Não">Não</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn small">Cadastrar Viagem</button>
+            </div>
+        </form>
+
+        <!-- Botões Adicionais -->
+        <div class="additional-buttons">
+            <a href="visualizar_cadastros.html" class="btn">Visualizar Cadastros Salvos</a>
+            <a href="gerar_comprovante.html" class="btn">Gerar Comprovante de Viagem</a>
+            <a href="editar_cadastro.html" class="btn">Editar Cadastro Salvo</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('formCadastro').addEventListener('submit', function(e) {
+            e.preventDefault(); // Previne o comportamento padrão do formulário
+
+            const formData = new FormData(this);
+
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbyO67nDQTeET0xxV0ow9TI22l91qabn1fMqR23nn6g93W4faELQXlLytVorScWMoEGt/exec';
+
+            fetch(scriptURL, { method: 'POST', body: formData })
+                .then(response => response.text())
+                .then(result => {
+                    alert(result); 
+                    document.getElementById('formCadastro').reset(); 
+                })
+                .catch(error => {
+                    console.error('Erro ao enviar dados:', error);
+                    alert('Ocorreu um erro ao salvar os dados.');
+                });
+        });
+    </script>
+</body>
+</html>
