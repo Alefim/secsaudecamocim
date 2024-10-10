@@ -237,20 +237,67 @@
             });
         }
 
-        // Função para imprimir a tabela
+        // Função para imprimir a tabela, garantindo a exibição do Telefone, Destino, Carro e Motorista
         function imprimirTabela() {
-            const printContents = document.getElementById('tabelaCadastros').outerHTML;
-            const originalContents = document.body.innerHTML;
+            const tabelaOriginal = document.getElementById('tabelaCadastros');
+            const linhas = tabelaOriginal.querySelectorAll('tbody tr');
 
-            document.body.innerHTML = printContents;
-            window.print();
-            document.body.innerHTML = originalContents;
+            // Criar uma nova tabela apenas com os campos de interesse
+            let tabelaParaImpressao = `
+                <table border="1" style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th>Nome do Paciente</th>
+                            <th>Telefone</th> <!-- Adicionando o Telefone -->
+                            <th>Destino</th>
+                            <th>Tipo de Carro</th>
+                            <th>Motorista</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            // Iterar sobre as linhas e pegar apenas os dados filtrados
+            linhas.forEach(linha => {
+                if (linha.style.display !== 'none') { // Considera apenas as linhas que estão visíveis (filtradas)
+                    const nomePaciente = linha.cells[0].textContent;
+                    const telefone = linha.cells[3].textContent; // Coluna do Telefone
+                    const destino = linha.cells[9].textContent;
+                    const tipoCarro = linha.cells[8].textContent;
+                    const motorista = linha.cells[6].textContent;
+
+                    tabelaParaImpressao += `
+                        <tr>
+                            <td>${nomePaciente}</td>
+                            <td>${telefone}</td> <!-- Incluindo o Telefone -->
+                            <td>${destino}</td>
+                            <td>${tipoCarro}</td>
+                            <td>${motorista}</td>
+                        </tr>
+                    `;
+                }
+            });
+
+            tabelaParaImpressao += `
+                    </tbody>
+                </table>
+            `;
+
+            // Abrir uma nova janela com a tabela personalizada e imprimir
+            const janelaImpressao = window.open('', '', 'height=500,width=800');
+            janelaImpressao.document.write('<html><head><title>Impressão de Cadastros</title></head><body>');
+            janelaImpressao.document.write('<h1>Cadastros Filtrados</h1>');
+            janelaImpressao.document.write(tabelaParaImpressao);
+            janelaImpressao.document.write('</body></html>');
+            janelaImpressao.document.close();
+            janelaImpressao.print();
         }
 
-        // Função para voltar para a tela de cadastro
+        // Função para voltar para a página de cadastro
         function voltarParaCadastro() {
-            window.location.href = 'index.html'; // Substitua pelo nome da sua página de cadastro
+            window.location.href = 'cadastro.html'; // Substitua pelo nome do seu arquivo de cadastro
         }
     </script>
+
 </body>
 </html>
