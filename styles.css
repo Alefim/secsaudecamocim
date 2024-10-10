@@ -39,6 +39,7 @@ label {
 input[type="text"],
 input[type="date"],
 input[type="time"],
+input[type="tel"], /* Estilo específico para telefone */
 select {
     width: 100%;
     padding: 10px;
@@ -50,6 +51,7 @@ select {
 input[type="text"]:focus,
 input[type="date"]:focus,
 input[type="time"]:focus,
+input[type="tel"]:focus, /* Estilo específico para telefone */
 select:focus {
     border-color: #007BFF; /* Cor azul para foco */
     outline: none;

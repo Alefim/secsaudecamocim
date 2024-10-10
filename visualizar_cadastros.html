@@ -42,6 +42,15 @@
             background-color: #45a049;
         }
 
+        /* Estilo dos campos de texto para filtragem */
+        .input-filter {
+            padding: 10px;
+            width: 200px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
         table {
             width: 100%;
             max-width: 1000px;
@@ -94,13 +103,14 @@
 
     <h1>Cadastros Salvos</h1>
 
-    <!-- Botões de Filtragem e Imprimir -->
+    <!-- Botões de Filtragem, Imprimir e Voltar -->
     <div class="button-container">
-        <input type="text" id="filtroNome" placeholder="Filtrar por Nome" class="btn" onkeyup="filtrarPorNome()">
-        <input type="text" id="filtroData" placeholder="Filtrar por Data (AAAA-MM-DD)" class="btn" onkeyup="filtrarPorData()">
-        <input type="text" id="filtroLocal" placeholder="Filtrar por Local" class="btn" onkeyup="filtrarPorLocal()">
+        <input type="text" id="filtroNome" placeholder="Filtrar por Nome" class="input-filter" onkeyup="filtrarPorNome()">
+        <input type="text" id="filtroData" placeholder="Filtrar por Data (AAAA-MM-DD)" class="input-filter" onkeyup="filtrarPorData()">
+        <input type="text" id="filtroDestino" placeholder="Filtrar por Destino" class="input-filter" onkeyup="filtrarPorDestino()">
         <button class="btn" onclick="resetarFiltro()">Mostrar Todos</button>
         <button class="btn" onclick="imprimirTabela()">Imprimir</button>
+        <button class="btn" id="voltar" onclick="voltarParaCadastro()">Voltar para Cadastro</button>
     </div>
 
     <!-- Tabela de Cadastros -->
@@ -110,12 +120,13 @@
                 <th>Nome do Paciente</th>
                 <th>CNS (Cartão SUS)</th>
                 <th>CPF</th>
+                <th>Telefone</th> <!-- Adicionado o campo Telefone -->
                 <th>Data de Agendamento</th>
                 <th>Horário</th>
                 <th>Motorista</th>
                 <th>Especialidade</th>
                 <th>Tipo de Carro</th>
-                <th>Local</th>
+                <th>Destino</th> <!-- Alterado Local para Destino -->
                 <th>Acompanhante</th>
                 <th>Retorno</th>
                 <th>Observações</th>
@@ -128,7 +139,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbx92cuAQ2irJz4MfWRP-sHd2LefxD6YOCfX89F7rqSP-ft6ccUx92axr2_kq8RVZkO0/exec'; // Substitua pelo seu URL
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzjWN8ayancn8N9Or1w_5SDc5ZXn_jbP6DQ4HyG2zZCfc8quIOxMr6AUHH0lQ5yg2jR/exec'; // Substitua pelo seu URL
 
             fetch(scriptURL)
                 .then(response => response.json())
@@ -143,12 +154,13 @@
                             'Nome do Paciente',
                             'CNS (Cartão SUS)',
                             'CPF',
+                            'Telefone', // Adicionado o campo Telefone
                             'Data de Agendamento',
                             'Horário',
                             'Motorista',
                             'Especialidade',
                             'Tipo de Carro',
-                            'Local',
+                            'Destino', // Alterado de "Local" para "Destino"
                             'Acompanhante',
                             'Retorno',
                             'Observações'
@@ -190,7 +202,7 @@
             const linhas = document.querySelectorAll('#tabelaCadastros tbody tr');
 
             linhas.forEach(linha => {
-                const data = linha.cells[3].textContent;
+                const data = linha.cells[4].textContent; // Alterado para a coluna correta
                 if (data.includes(filtro)) {
                     linha.style.display = '';
                 } else {
@@ -199,14 +211,14 @@
             });
         }
 
-        // Função para filtrar por Local
-        function filtrarPorLocal() {
-            const filtro = document.getElementById('filtroLocal').value.toLowerCase();
+        // Função para filtrar por Destino
+        function filtrarPorDestino() {
+            const filtro = document.getElementById('filtroDestino').value.toLowerCase();
             const linhas = document.querySelectorAll('#tabelaCadastros tbody tr');
 
             linhas.forEach(linha => {
-                const local = linha.cells[8].textContent.toLowerCase();
-                if (local.includes(filtro)) {
+                const destino = linha.cells[9].textContent.toLowerCase(); // Coluna de Destino
+                if (destino.includes(filtro)) {
                     linha.style.display = '';
                 } else {
                     linha.style.display = 'none';
@@ -218,7 +230,7 @@
         function resetarFiltro() {
             document.getElementById('filtroNome').value = '';
             document.getElementById('filtroData').value = '';
-            document.getElementById('filtroLocal').value = '';
+            document.getElementById('filtroDestino').value = '';
             const linhas = document.querySelectorAll('#tabelaCadastros tbody tr');
             linhas.forEach(linha => {
                 linha.style.display = '';
@@ -233,6 +245,11 @@
             document.body.innerHTML = printContents;
             window.print();
             document.body.innerHTML = originalContents;
+        }
+
+        // Função para voltar para a tela de cadastro
+        function voltarParaCadastro() {
+            window.location.href = 'index.html'; // Substitua pelo nome da sua página de cadastro
         }
     </script>
 </body>
