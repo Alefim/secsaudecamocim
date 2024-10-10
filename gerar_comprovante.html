@@ -45,17 +45,24 @@
             const selectedIndex = document.getElementById('selectCadastro').value;
 
             if (selectedIndex) {
-                const scriptURL = `hhttps://script.google.com/macros/s/AKfycbzw3luozghGvnjnkJ2GTYctBTRmL0gDJiqXS2_Bvvh4JIVfJz-LikR_AoNtG5FU4IE0/exec?index=${selectedIndex}`; // Substitua pelo URL do seu script
+                const scriptURL = `https://script.google.com/macros/s/AKfycbw104KtxnwYc-mBv9f9UGbhSQHe-bbo73XijehzPk2HbUm3xWEXqz76dnVwJzPKSK75/exec?index=${selectedIndex}`; // Substitua pelo URL do seu script
 
                 fetch(scriptURL)
-                    .then(response => response.text())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Erro na resposta da rede');
+                        }
+                        return response.text();
+                    })
                     .then(result => {
-                        // Abre o comprovante em uma nova aba
-                        window.open(result, '_blank'); // Abre a URL do PDF em uma nova aba
+                        const newWindow = window.open();
+                        newWindow.document.write(result);
+                        newWindow.document.close();
+                        newWindow.print(); // Abre a janela de impressão
                     })
                     .catch(error => {
                         console.error('Erro ao gerar comprovante:', error);
-                        alert('Ocorreu um erro ao gerar o comprovante.');
+                        alert('Ocorreu um erro ao gerar o comprovante: ' + error.message);
                     });
             } else {
                 alert('Por favor, selecione um cadastro.');
