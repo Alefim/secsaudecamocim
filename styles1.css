@@ -1,22 +1,26 @@
 .container {
-    max-width: 800px; /* Limita a largura da página */
-    margin: 0 auto; /* Centraliza a página */
-    padding: 20px; /* Adiciona espaço ao redor do conteúdo */
+    max-width: 80%; /* Largura máxima de 80% da tela, responsiva */
+    margin: 0 auto; /* Centraliza a página horizontalmente */
+    padding: 2rem; /* Espaçamento interno */
+    background-color: #fff; /* Fundo branco para contraste */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adiciona sombra */
+    border-radius: 8px; /* Bordas arredondadas */
 }
 
 h1 {
     text-align: center; /* Centraliza o título */
+    margin-bottom: 2rem; /* Espaço abaixo do título */
 }
 
 table {
-    width: 50%; /* Largura total da tabela */
+    width: 100%; /* Largura total da tabela, para se ajustar ao container */
     border-collapse: collapse; /* Remove espaços entre as bordas das células */
-    margin-top: 20px; /* Espaçamento acima da tabela */
+    margin-top: 1.5rem; /* Espaçamento acima da tabela */
 }
 
 th, td {
     border: 1px solid #ddd; /* Borda das células */
-    padding: 10px; /* Espaçamento interno das células */
+    padding: 1rem; /* Espaçamento interno das células */
     text-align: left; /* Alinhamento do texto à esquerda */
 }
 
@@ -41,10 +45,30 @@ tr:hover {
     border-radius: 5px; /* Bordas arredondadas */
     cursor: pointer; /* Cursor de mão ao passar sobre o botão */
     margin: 20px 0; /* Espaço acima e abaixo do botão */
-    display: block; /* Faz o botão ocupar toda a largura disponível */
+    display: inline-block; /* Mantém o botão no tamanho do conteúdo */
     text-align: center; /* Centraliza o texto do botão */
 }
 
 .btn:hover {
     background-color: #45a049; /* Cor do botão ao passar o mouse */
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .container {
+        max-width: 95%; /* Expande o container para quase toda a largura em telas menores */
+        padding: 1rem; /* Reduz o padding para telas menores */
+    }
+
+    table {
+        font-size: 0.9rem; /* Reduz o tamanho da fonte na tabela */
+    }
+
+    th, td {
+        padding: 0.75rem; /* Ajusta o espaçamento das células para telas menores */
+    }
+
+    .btn {
+        width: 100%; /* Faz o botão ocupar toda a largura em telas menores */
+    }
 }
