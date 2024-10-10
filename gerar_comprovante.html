@@ -9,14 +9,58 @@
 <body>
     <div class="container">
         <h1>Gerar Comprovante de Viagem</h1>
-        <!-- Interface para escolher um cadastro e gerar um comprovante em PDF -->
         <p>Selecione um cadastro para gerar o comprovante da viagem.</p>
-        <!-- Pode ser uma lista, dropdown ou busca -->
+        
         <select id="selectCadastro">
             <option value="">Selecione um cadastro...</option>
-            <!-- Cadastros disponíveis -->
+            <!-- Aqui você deve adicionar as opções dinamicamente com JavaScript -->
         </select>
         <button class="btn small">Gerar Comprovante</button>
     </div>
+
+    <script>
+        // Função para buscar os dados da planilha e preencher o select
+        document.addEventListener('DOMContentLoaded', function() {
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbx92cuAQ2irJz4MfWRP-sHd2LefxD6YOCfX89F7rqSP-ft6ccUx92axr2_kq8RVZkO0/exec'; // Substitua pelo seu URL
+
+            fetch(scriptURL)
+                .then(response => response.json())
+                .then(data => {
+                    const select = document.getElementById('selectCadastro');
+                    data.forEach((row, index) => {
+                        const option = document.createElement('option');
+                        option.value = index; // Armazena o índice da linha
+                        option.textContent = `${row[0]} - ${row[1]}`; // Nome do paciente e data
+                        select.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar dados:', error);
+                    alert('Ocorreu um erro ao buscar os dados.');
+                });
+        });
+
+        // Código para gerar o comprovante
+        document.querySelector('.btn.small').addEventListener('click', function() {
+            const selectedIndex = document.getElementById('selectCadastro').value;
+
+            if (selectedIndex) {
+                const scriptURL = `hhttps://script.google.com/macros/s/AKfycbzw3luozghGvnjnkJ2GTYctBTRmL0gDJiqXS2_Bvvh4JIVfJz-LikR_AoNtG5FU4IE0/exec?index=${selectedIndex}`; // Substitua pelo URL do seu script
+
+                fetch(scriptURL)
+                    .then(response => response.text())
+                    .then(result => {
+                        // Abre o comprovante em uma nova aba
+                        window.open(result, '_blank'); // Abre a URL do PDF em uma nova aba
+                    })
+                    .catch(error => {
+                        console.error('Erro ao gerar comprovante:', error);
+                        alert('Ocorreu um erro ao gerar o comprovante.');
+                    });
+            } else {
+                alert('Por favor, selecione um cadastro.');
+            }
+        });
+    </script>
 </body>
 </html>

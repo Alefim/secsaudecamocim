@@ -9,7 +9,7 @@ h1 {
 }
 
 table {
-    width: 100%; /* Largura total da tabela */
+    width: 50%; /* Largura total da tabela */
     border-collapse: collapse; /* Remove espaços entre as bordas das células */
     margin-top: 20px; /* Espaçamento acima da tabela */
 }
