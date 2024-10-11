@@ -3,90 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Cadastro Salvo</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Editar Cadastro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            margin-top: 20px;
+            display: none; /* Inicialmente escondido */
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Editar Cadastro Salvo</h1>
+    <h1>Editar Cadastro</h1>
+
+    <!-- Campo de pesquisa -->
+    <label for="pesquisa">Pesquisar Cadastro (Nome, CPF ou Destino):</label>
+    <input type="text" id="pesquisa" placeholder="Digite o nome, CPF ou destino">
+    <button id="btnPesquisar">Pesquisar</button>
+
+    <label for="selectCadastroEditar">Selecione um cadastro para editar:</label>
+    <select id="selectCadastroEditar">
+        <option value="">Selecione...</option>
+    </select>
+
+    <form id="formEditarCadastro">
+        <h2>Dados do Cadastro</h2>
+        <label for="nomePaciente">Nome do Paciente:</label>
+        <input type="text" id="nomePaciente" required>
         
-        <p>Selecione um cadastro para editar:</p>
-        <select id="selectCadastroEditar">
-            <option value="">Selecione um cadastro...</option>
-            <!-- Os cadastros disponíveis devem ser preenchidos aqui com JavaScript -->
-        </select>
+        <label for="dataAgendamento">Data do Agendamento:</label>
+        <input type="date" id="dataAgendamento" required>
+        
+        <label for="horario">Horário:</label>
+        <input type="time" id="horario" required>
+        
+        <label for="motorista">Motorista:</label>
+        <input type="text" id="motorista" required>
+        
+        <label for="especialidade">Especialidade:</label>
+        <input type="text" id="especialidade" required>
+        
+        <label for="tipoCarro">Tipo de Carro:</label>
+        <input type="text" id="tipoCarro" required>
+        
+        <label for="destino">Destino:</label>
+        <input type="text" id="destino" required>
+        
+        <label for="telefone">Telefone:</label>
+        <input type="tel" id="telefone" required>
+        
+        <label for="acompanhante">Acompanhante:</label>
+        <input type="text" id="acompanhante">
+        
+        <label for="retorno">Retorno:</label>
+        <input type="text" id="retorno">
 
-        <form id="formEditarCadastro" style="display:none;">
-            <div class="form-group">
-                <label for="nomePaciente">Nome do Paciente:</label>
-                <input type="text" id="nomePaciente" name="nomePaciente" required>
-            </div>
-
-            <div class="form-group">
-                <label for="dataAgendamento">Data de Agendamento:</label>
-                <input type="date" id="dataAgendamento" name="dataAgendamento" required>
-            </div>
-
-            <div class="form-group">
-                <label for="horario">Horário:</label>
-                <input type="time" id="horario" name="horario" required>
-            </div>
-
-            <div class="form-group">
-                <label for="motorista">Motorista:</label>
-                <input type="text" id="motorista" name="motorista" required>
-            </div>
-
-            <div class="form-group">
-                <label for="especialidade">Especialidade:</label>
-                <input type="text" id="especialidade" name="especialidade" required>
-            </div>
-
-            <div class="form-group">
-                <label for="tipoCarro">Tipo de Carro:</label>
-                <input type="text" id="tipoCarro" name="tipoCarro" required>
-            </div>
-
-            <div class="form-group">
-                <label for="local">Local:</label>
-                <input type="text" id="local" name="local" required>
-            </div>
-
-            <div class="form-group">
-                <label for="acompanhante">Acompanhante:</label>
-                <input type="text" id="acompanhante" name="acompanhante">
-            </div>
-
-            <div class="form-group">
-                <label for="retorno">Retorno (Sim/Não):</label>
-                <select id="retorno" name="retorno" required>
-                    <option value="Sim">Sim</option>
-                    <option value="Não">Não</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <button type="submit" class="btn small">Salvar Edição</button>
-            </div>
-        </form>
-    </div>
+        <button type="submit">Salvar Edição</button>
+    </form>
 
     <script>
-        // Suponha que você tenha uma função para obter os cadastros salvos e preencher o select
-        function carregarCadastros() {
-            // Aqui você deve buscar os dados do Google Sheets ou outra fonte
-            const cadastros = [
-                // Exemplo de cadastros que poderiam vir do Google Sheets
-                { id: 1, nome: "João da Silva", data: "2024-10-10", horario: "14:00", motorista: "Carlos", especialidade: "Cardiologia", tipoCarro: "Sedan", local: "Hospital A", acompanhante: "Maria", retorno: "Sim" },
-                { id: 2, nome: "Ana Santos", data: "2024-10-11", horario: "09:00", motorista: "Roberto", especialidade: "Pediatria", tipoCarro: "Van", local: "Hospital B", acompanhante: "", retorno: "Não" }
-                // Adicione mais cadastros conforme necessário
-            ];
+        // URL do Google Apps Script
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwe4mOC2q7jJPeKv1wNZv2b5vuLsUS7svX0yg3_Qpz4OunoryBja_NIFmTBHN8hEM0/exec'; // Altere para o seu URL
 
+        // Variável para armazenar todos os cadastros
+        let todosCadastros = [];
+
+        // Função para carregar os cadastros da planilha
+        function carregarCadastros() {
+            fetch(scriptURL)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Dados carregados:", data); // Log dos dados carregados
+                    todosCadastros = data; // Armazena todos os cadastros
+                    atualizarSelect(todosCadastros); // Atualiza o select com todos os cadastros
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar cadastros:', error);
+                });
+        }
+
+        // Atualiza o select com os dados fornecidos
+        function atualizarSelect(cadastros) {
             const select = document.getElementById('selectCadastroEditar');
+            select.innerHTML = ''; // Limpa opções existentes
             cadastros.forEach(cadastro => {
+                const nomePaciente = cadastro.nomePaciente || 'Nome não definido';
+                const dataAgendamento = cadastro.dataAgendamento || 'Data não definida';
+                
                 const option = document.createElement('option');
-                option.value = cadastro.id; // id do cadastro
-                option.textContent = `${cadastro.nome} - ${cadastro.data}`;
+                option.value = cadastro.id; // Altere aqui se o ID estiver em outro campo
+                option.textContent = `${nomePaciente} - ${dataAgendamento}`;
                 select.appendChild(option);
             });
         }
@@ -95,36 +126,35 @@
         document.getElementById('selectCadastroEditar').addEventListener('change', function() {
             const id = this.value;
 
-            // Aqui você deve buscar os dados do cadastro selecionado
-            // Usando o mesmo array de exemplo para simplicidade
-            const cadastros = [
-                { id: 1, nome: "João da Silva", data: "2024-10-10", horario: "14:00", motorista: "Carlos", especialidade: "Cardiologia", tipoCarro: "Sedan", local: "Hospital A", acompanhante: "Maria", retorno: "Sim" },
-                { id: 2, nome: "Ana Santos", data: "2024-10-11", horario: "09:00", motorista: "Roberto", especialidade: "Pediatria", tipoCarro: "Van", local: "Hospital B", acompanhante: "", retorno: "Não" }
-            ];
+            if (id) {
+                fetch(scriptURL + '?id=' + id)
+                    .then(response => response.json())
+                    .then(cadastroSelecionado => {
+                        // Preencher os campos do formulário
+                        document.getElementById('nomePaciente').value = cadastroSelecionado.nomePaciente || '';
+                        document.getElementById('dataAgendamento').value = cadastroSelecionado.dataAgendamento || '';
+                        document.getElementById('horario').value = cadastroSelecionado.horario || '';
+                        document.getElementById('motorista').value = cadastroSelecionado.motorista || '';
+                        document.getElementById('especialidade').value = cadastroSelecionado.especialidade || '';
+                        document.getElementById('tipoCarro').value = cadastroSelecionado.tipoCarro || '';
+                        document.getElementById('destino').value = cadastroSelecionado.destino || '';
+                        document.getElementById('telefone').value = cadastroSelecionado.telefone || '';
+                        document.getElementById('acompanhante').value = cadastroSelecionado.acompanhante || '';
+                        document.getElementById('retorno').value = cadastroSelecionado.retorno || '';
 
-            const cadastroSelecionado = cadastros.find(cadastro => cadastro.id == id);
-            if (cadastroSelecionado) {
-                // Preencher os campos do formulário
-                document.getElementById('nomePaciente').value = cadastroSelecionado.nome;
-                document.getElementById('dataAgendamento').value = cadastroSelecionado.data;
-                document.getElementById('horario').value = cadastroSelecionado.horario;
-                document.getElementById('motorista').value = cadastroSelecionado.motorista;
-                document.getElementById('especialidade').value = cadastroSelecionado.especialidade;
-                document.getElementById('tipoCarro').value = cadastroSelecionado.tipoCarro;
-                document.getElementById('local').value = cadastroSelecionado.local;
-                document.getElementById('acompanhante').value = cadastroSelecionado.acompanhante;
-                document.getElementById('retorno').value = cadastroSelecionado.retorno;
-
-                // Exibir o formulário
-                document.getElementById('formEditarCadastro').style.display = 'block';
+                        // Exibir o formulário
+                        document.getElementById('formEditarCadastro').style.display = 'block';
+                    })
+                    .catch(error => {
+                        console.error('Erro ao carregar cadastro selecionado:', error);
+                    });
             } else {
-                // Limpar o formulário se nada for selecionado
-                document.getElementById('formEditarCadastro').reset();
+                // Se nenhuma opção for selecionada, esconder o formulário
                 document.getElementById('formEditarCadastro').style.display = 'none';
             }
         });
 
-        // Lógica para salvar as edições (adapte conforme necessário)
+        // Lógica para salvar as edições
         document.getElementById('formEditarCadastro').addEventListener('submit', function(e) {
             e.preventDefault(); // Previne o comportamento padrão do formulário
 
@@ -132,9 +162,11 @@
             const formData = new FormData(this);
             const id = document.getElementById('selectCadastroEditar').value;
 
+            // Adiciona o ID ao FormData
+            formData.append('id', id);
+
             // Envie os dados para seu Google Apps Script ou API
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbwX9C-bdLq1TMjqOiQceRDu-UK3z1E_fG0GNmUt1i3o93P8pTwZ0wRnrWDCB4-HMP3A/exec'; // Altere para o seu URL
-            fetch(scriptURL, { method: 'POST', body: formData })
+            fetch(scriptURL + '?method=POST', { method: 'POST', body: formData })
                 .then(response => response.text())
                 .then(result => {
                     alert(result); // Mostra mensagem de sucesso
@@ -147,6 +179,17 @@
                     console.error('Erro ao salvar edição:', error);
                     alert('Ocorreu um erro ao salvar a edição.');
                 });
+        });
+
+        // Função para pesquisar cadastros
+        document.getElementById('btnPesquisar').addEventListener('click', function() {
+            const pesquisa = document.getElementById('pesquisa').value.toLowerCase(); // Captura o valor da pesquisa
+            const resultados = todosCadastros.filter(cadastro => {
+                return cadastro.nomePaciente.toLowerCase().includes(pesquisa) ||
+                       cadastro.cpf && cadastro.cpf.includes(pesquisa) || // Adicione a condição para CPF
+                       cadastro.destino.toLowerCase().includes(pesquisa); // Adicione a condição para Destino
+            });
+            atualizarSelect(resultados); // Atualiza o select com os resultados filtrados
         });
 
         // Carregar os cadastros ao abrir a página
