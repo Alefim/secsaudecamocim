@@ -53,8 +53,13 @@
 
     <form id="formEditarCadastro">
         <h2>Dados do Cadastro</h2>
+
+        <!-- Ordem dos campos ajustada -->
         <label for="nomePaciente">Nome do Paciente:</label>
         <input type="text" id="nomePaciente" required>
+        
+        <label for="telefone">Telefone:</label>
+        <input type="tel" id="telefone" required>
         
         <label for="dataAgendamento">Data do Agendamento:</label>
         <input type="date" id="dataAgendamento" required>
@@ -74,9 +79,6 @@
         <label for="destino">Destino:</label>
         <input type="text" id="destino" required>
         
-        <label for="telefone">Telefone:</label>
-        <input type="tel" id="telefone" required>
-        
         <label for="acompanhante">Acompanhante:</label>
         <input type="text" id="acompanhante">
         
@@ -88,7 +90,7 @@
 
     <script>
         // URL do Google Apps Script
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbwe4mOC2q7jJPeKv1wNZv2b5vuLsUS7svX0yg3_Qpz4OunoryBja_NIFmTBHN8hEM0/exec'; // Altere para o seu URL
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbz35ifj2Y4wrM6ruPDk37jCClWQY2LavltDNATfeJMx59a-62-1EeHQs3SrVDL_PIvR/exec'; // Altere para o seu URL
 
         // Variável para armazenar todos os cadastros
         let todosCadastros = [];
@@ -132,13 +134,13 @@
                     .then(cadastroSelecionado => {
                         // Preencher os campos do formulário
                         document.getElementById('nomePaciente').value = cadastroSelecionado.nomePaciente || '';
+                        document.getElementById('telefone').value = cadastroSelecionado.telefone || '';
                         document.getElementById('dataAgendamento').value = cadastroSelecionado.dataAgendamento || '';
                         document.getElementById('horario').value = cadastroSelecionado.horario || '';
                         document.getElementById('motorista').value = cadastroSelecionado.motorista || '';
                         document.getElementById('especialidade').value = cadastroSelecionado.especialidade || '';
                         document.getElementById('tipoCarro').value = cadastroSelecionado.tipoCarro || '';
                         document.getElementById('destino').value = cadastroSelecionado.destino || '';
-                        document.getElementById('telefone').value = cadastroSelecionado.telefone || '';
                         document.getElementById('acompanhante').value = cadastroSelecionado.acompanhante || '';
                         document.getElementById('retorno').value = cadastroSelecionado.retorno || '';
 
