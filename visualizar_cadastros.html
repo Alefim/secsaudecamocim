@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualizar Cadastros Salvos</title>
     <link rel="stylesheet" href="styles1.css">
-    <link rel="icon" href="icons8-ambulância-16.ico" type="image/x-icon"> <!-- Favicon -->
+    <link rel="icon" href="icons8-ambulância-16.ico" type="image/x-icon">
     <style>
-        /* Estilos para toda a página */
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
@@ -20,7 +19,6 @@
             margin-bottom: 20px;
         }
 
-        /* Centraliza os botões de filtro e o botão de imprimir */
         .button-container {
             text-align: center;
             margin-bottom: 20px;
@@ -42,7 +40,6 @@
             background-color: #45a049;
         }
 
-        /* Estilo dos campos de texto para filtragem */
         .input-filter {
             padding: 10px;
             width: 200px;
@@ -63,7 +60,7 @@
         th, td {
             border: 1px solid #ddd;
             padding: 12px;
-            text-align: center; /* Centraliza o conteúdo dentro das células */
+            text-align: center;
         }
 
         th {
@@ -79,7 +76,6 @@
             background-color: #ddd;
         }
 
-        /* Estilos para telas menores */
         @media screen and (max-width: 768px) {
             table {
                 font-size: 14px;
@@ -94,7 +90,7 @@
             }
 
             .btn {
-                width: 100%; /* O botão ocupa toda a largura em telas menores */
+                width: 100%;
             }
         }
     </style>
@@ -103,7 +99,6 @@
 
     <h1>Cadastros Salvos</h1>
 
-    <!-- Botões de Filtragem, Imprimir e Voltar -->
     <div class="button-container">
         <input type="text" id="filtroNome" placeholder="Filtrar por Nome" class="input-filter" onkeyup="filtrarPorNome()">
         <input type="text" id="filtroData" placeholder="Filtrar por Data (AAAA-MM-DD)" class="input-filter" onkeyup="filtrarPorData()">
@@ -113,20 +108,20 @@
         <button class="btn" id="voltar" onclick="voltarParaCadastro()">Voltar para Cadastro</button>
     </div>
 
-    <!-- Tabela de Cadastros -->
     <table id="tabelaCadastros">
         <thead>
             <tr>
                 <th>Nome do Paciente</th>
                 <th>CNS (Cartão SUS)</th>
                 <th>CPF</th>
-                <th>Telefone</th> <!-- Adicionado o campo Telefone -->
+                <th>Endereço</th>
+                <th>Telefone</th>
                 <th>Data de Agendamento</th>
                 <th>Horário</th>
                 <th>Motorista</th>
                 <th>Especialidade</th>
                 <th>Tipo de Carro</th>
-                <th>Destino</th> <!-- Alterado Local para Destino -->
+                <th>Destino</th>
                 <th>Acompanhante</th>
                 <th>Retorno</th>
                 <th>Observações</th>
@@ -139,36 +134,37 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzjWN8ayancn8N9Or1w_5SDc5ZXn_jbP6DQ4HyG2zZCfc8quIOxMr6AUHH0lQ5yg2jR/exec'; // Substitua pelo seu URL
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwiWxVBbBgc_hZ2-QSx9SZblQZljEGc10j1qFj8H3FMFfU49f9oEEvHzC4Nyhs3xDs/exec';
 
             fetch(scriptURL)
                 .then(response => response.json())
                 .then(data => {
+                    console.log('Dados recebidos:', data);
                     const tbody = document.querySelector('#tabelaCadastros tbody');
-                    tbody.innerHTML = ''; // Limpa o conteúdo anterior
+                    tbody.innerHTML = '';
 
                     data.forEach(row => {
                         const tr = document.createElement('tr');
-
                         const colunas = [
-                            'Nome do Paciente',
-                            'CNS (Cartão SUS)',
-                            'CPF',
-                            'Telefone', // Adicionado o campo Telefone
-                            'Data de Agendamento',
-                            'Horário',
-                            'Motorista',
-                            'Especialidade',
-                            'Tipo de Carro',
-                            'Destino', // Alterado de "Local" para "Destino"
-                            'Acompanhante',
-                            'Retorno',
-                            'Observações'
+                            'nomePaciente',
+                            'cartaoSUS',
+                            'cpf',
+                            'endereco',
+                            'telefone',
+                            'dataAgendamento',
+                            'horario',
+                            'motorista',
+                            'especialidade',
+                            'tipoCarro',
+                            'destino',
+                            'acompanhante',
+                            'retorno',
+                            'observacoes'
                         ];
 
-                        colunas.forEach((coluna, index) => {
+                        colunas.forEach((coluna) => {
                             const td = document.createElement('td');
-                            td.textContent = row[index] || ''; // Insere o dado correspondente ou vazio se não houver
+                            td.textContent = row[coluna] || '';
                             tr.appendChild(td);
                         });
 
@@ -181,52 +177,36 @@
                 });
         });
 
-        // Função para filtrar por Nome
         function filtrarPorNome() {
             const filtro = document.getElementById('filtroNome').value.toLowerCase();
             const linhas = document.querySelectorAll('#tabelaCadastros tbody tr');
 
             linhas.forEach(linha => {
                 const nome = linha.cells[0].textContent.toLowerCase();
-                if (nome.includes(filtro)) {
-                    linha.style.display = '';
-                } else {
-                    linha.style.display = 'none';
-                }
+                linha.style.display = nome.includes(filtro) ? '' : 'none';
             });
         }
 
-        // Função para filtrar por Data de Agendamento
         function filtrarPorData() {
             const filtro = document.getElementById('filtroData').value;
             const linhas = document.querySelectorAll('#tabelaCadastros tbody tr');
 
             linhas.forEach(linha => {
-                const data = linha.cells[4].textContent; // Alterado para a coluna correta
-                if (data.includes(filtro)) {
-                    linha.style.display = '';
-                } else {
-                    linha.style.display = 'none';
-                }
+                const data = linha.cells[5].textContent;
+                linha.style.display = data.includes(filtro) ? '' : 'none';
             });
         }
 
-        // Função para filtrar por Destino
         function filtrarPorDestino() {
             const filtro = document.getElementById('filtroDestino').value.toLowerCase();
             const linhas = document.querySelectorAll('#tabelaCadastros tbody tr');
 
             linhas.forEach(linha => {
-                const destino = linha.cells[9].textContent.toLowerCase(); // Coluna de Destino
-                if (destino.includes(filtro)) {
-                    linha.style.display = '';
-                } else {
-                    linha.style.display = 'none';
-                }
+                const destino = linha.cells[10].textContent.toLowerCase();
+                linha.style.display = destino.includes(filtro) ? '' : 'none';
             });
         }
 
-        // Função para resetar todos os filtros
         function resetarFiltro() {
             document.getElementById('filtroNome').value = '';
             document.getElementById('filtroData').value = '';
@@ -237,44 +217,33 @@
             });
         }
 
-        // Função para imprimir a tabela, garantindo a exibição do Telefone, Destino, Carro e Motorista
         function imprimirTabela() {
             const tabelaOriginal = document.getElementById('tabelaCadastros');
             const linhas = tabelaOriginal.querySelectorAll('tbody tr');
 
-            // Criar uma nova tabela apenas com os campos de interesse
             let tabelaParaImpressao = `
                 <table border="1" style="width: 100%; border-collapse: collapse;">
                     <thead>
                         <tr>
-                            <th>Nome do Paciente</th>
-                            <th>Telefone</th> <!-- Adicionando o Telefone -->
-                            <th>Destino</th>
-                            <th>Tipo de Carro</th>
-                            <th>Motorista</th>
+                            <th>PASSAGEIROS</th>
+                            <th>OBS</th>
+                            <th>ENDEREÇO</th>
+                            <th>CONTATO</th>
+                            <th>DESTINO</th>
                         </tr>
                     </thead>
                     <tbody>
             `;
 
-            // Iterar sobre as linhas e pegar apenas os dados filtrados
             linhas.forEach(linha => {
-                if (linha.style.display !== 'none') { // Considera apenas as linhas que estão visíveis (filtradas)
-                    const nomePaciente = linha.cells[0].textContent;
-                    const telefone = linha.cells[3].textContent; // Coluna do Telefone
-                    const destino = linha.cells[9].textContent;
-                    const tipoCarro = linha.cells[8].textContent;
-                    const motorista = linha.cells[6].textContent;
-
-                    tabelaParaImpressao += `
-                        <tr>
-                            <td>${nomePaciente}</td>
-                            <td>${telefone}</td> <!-- Incluindo o Telefone -->
-                            <td>${destino}</td>
-                            <td>${tipoCarro}</td>
-                            <td>${motorista}</td>
-                        </tr>
-                    `;
+                if (linha.style.display !== 'none') {
+                    tabelaParaImpressao += '<tr>';
+                    tabelaParaImpressao += `<td>${linha.cells[0].textContent}</td>`;
+                    tabelaParaImpressao += `<td>${linha.cells[13].textContent}</td>`;
+                    tabelaParaImpressao += `<td>${linha.cells[3].textContent}</td>`;
+                    tabelaParaImpressao += `<td>${linha.cells[4].textContent}</td>`;
+                    tabelaParaImpressao += `<td>${linha.cells[10].textContent}</td>`;
+                    tabelaParaImpressao += '</tr>';
                 }
             });
 
@@ -283,23 +252,18 @@
                 </table>
             `;
 
-            // Abrir uma nova janela com a tabela personalizada e imprimir
-            const janelaImpressao = window.open('', '', 'height=500,width=800');
-            janelaImpressao.document.write('<html><head><title>Impressão de Cadastros</title></head><body>');
-            janelaImpressao.document.write('<h1>Cadastros Filtrados</h1>');
+            const janelaImpressao = window.open('', '', 'height=600,width=800');
+            janelaImpressao.document.write('<html><head><title>Tabela de Impressão</title></head><body>');
             janelaImpressao.document.write(tabelaParaImpressao);
             janelaImpressao.document.write('</body></html>');
             janelaImpressao.document.close();
             janelaImpressao.print();
         }
 
-        // Função para voltar para a página de cadastro
         function voltarParaCadastro() {
-            window.location.href = 'index.html'; // Substitua pelo nome do seu arquivo de cadastro
+            window.location.href = 'index.html';
         }
     </script>
 
 </body>
 </html>
-
-

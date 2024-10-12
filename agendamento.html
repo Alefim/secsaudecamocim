@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento de Viagem</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="icons8-ambulância-16.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <h1>Agendamento de Viagem</h1>
+
+        <table class="agendamento-table">
+            <thead>
+                <tr>
+                    <th>Passageiros</th>
+                    <th>Observações</th>
+                    <th>Endereço do Domicílio</th>
+                    <th>Contato</th>
+                    <th>Destino da Viagem</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" name="passageiros" placeholder="Nome dos Passageiros"></td>
+                    <td><input type="text" name="observacoes" placeholder="Observações"></td>
+                    <td><input type="text" name="enderecoDomicilio" placeholder="Endereço do Domicílio"></td>
+                    <td><input type="text" name="contato" placeholder="Contato"></td>
+                    <td><input type="text" name="destinoViagem" placeholder="Destino da Viagem"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="form-group">
+            <button type="submit" class="btn small">Salvar Agendamento</button>
+        </div>
+
+        <div class="additional-buttons">
+            <a href="index.html" class="btn">Voltar ao Cadastro de Viagem</a>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.btn.small').addEventListener('click', function() {
+            alert("Agendamento salvo com sucesso!");
+        });
+    </script>
+</body>
+</html>

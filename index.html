@@ -5,9 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Viagem</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="icons8-ambulância-16.ico" type="image/x-icon"> <!-- Favicon -->
+    <link rel="icon" href="icons8-ambulância-16.ico" type="image/x-icon">
+    <style>
+        .header {
+            display: flex;
+            justify-content: flex-end; /* Alinha o botão à direita */
+            padding: 10px;
+        }
+        .btn {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-left: 10px; /* Espaço entre botões se necessário */
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
+    <header class="header">
+        <a href="login.html" class="btn">Sair</a>
+    </header>
+
     <div class="container">
         <h1>Cadastro de Viagem <br>de Paciente SMS</h1>
         
@@ -27,10 +49,14 @@
                 <input type="text" id="cpf" name="cpf" pattern="\d{11}" title="Digite 11 números, sem pontos ou traços.">
             </div>
 
-            <!-- Adicionando o campo Telefone -->
             <div class="form-group">
                 <label for="telefone">Telefone:</label>
                 <input type="text" id="telefone" name="telefone" pattern="\d{10,11}" title="Digite 10 ou 11 números, sem espaços ou traços." required>
+            </div>
+
+            <div class="form-group">
+                <label for="endereco">Endereço:</label>
+                <input type="text" id="endereco" name="endereco" required>
             </div>
 
             <div class="form-group">
@@ -59,8 +85,8 @@
             </div>
 
             <div class="form-group">
-                <label for="local">Local:</label>
-                <input type="text" id="local" name="local" required>
+                <label for="destino">Destino:</label>
+                <input type="text" id="destino" name="destino" required>
             </div>
 
             <div class="form-group">
@@ -86,21 +112,21 @@
             </div>
         </form>
 
-        <!-- Botões Adicionais -->
         <div class="additional-buttons">
             <a href="visualizar_cadastros.html" class="btn">Visualizar Cadastros Salvos</a>
             <a href="gerar_comprovante.html" class="btn">Gerar Comprovante de Viagem</a>
             <a href="editar_cadastro.html" class="btn">Editar Cadastro Salvo</a>
+            <a href="agendamento.html" class="btn">Agendamento</a>
         </div>
     </div>
 
     <script>
         document.getElementById('formCadastro').addEventListener('submit', function(e) {
-            e.preventDefault(); // Previne o comportamento padrão do formulário
+            e.preventDefault();
 
             const formData = new FormData(this);
 
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbxw68JDzWzJtEpn0zire-VvAqZ3vqaS6otZafp1rPEZaXjDA-epFvJQz0jA_HU7cNHi/exec';
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbx61nj9PZtGXgnqReiPo8TvrZcva67syY-R04oci0qzG-rAk1tEkogxI0ZN4RWGT9BE/exec';
 
             fetch(scriptURL, { method: 'POST', body: formData })
                 .then(response => response.text())
