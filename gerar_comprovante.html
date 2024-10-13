@@ -3,26 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerar Comprovante de Viagem</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Gerar Comprovante</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        .comprovante {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .info label {
+            font-weight: bold;
+        }
+        .info span {
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Gerar Comprovante de Viagem</h1>
-        <p>Selecione um cadastro para gerar o comprovante da viagem.</p>
-        
-        <select id="selectCadastro">
-            <option value="">Selecione um cadastro...</option>
-            <!-- Aqui você deve adicionar as opções dinamicamente com JavaScript -->
-        </select>
-        <button class="btn small">Gerar Comprovante</button>
-    </div>
+
+    <h1>Gerar Comprovante</h1>
+    
+    <select id="selectCadastro">
+        <!-- Opções preenchidas via JavaScript -->
+    </select>
+    <button class="btn small">Gerar Comprovante</button>
+
+    <div id="comprovanteContainer"></div>
 
     <script>
+        // URL do Google Apps Script
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwDInq5ZvvkaeGaUhNlDPMXRv0HPsLgt_Flb9pUzyumqr0xW6NsUHB86-grd8HS0d6g/exec';
+
         // Função para buscar os dados da planilha e preencher o select
         document.addEventListener('DOMContentLoaded', function() {
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbx92cuAQ2irJz4MfWRP-sHd2LefxD6YOCfX89F7rqSP-ft6ccUx92axr2_kq8RVZkO0/exec'; // Substitua pelo seu URL
-
             fetch(scriptURL)
                 .then(response => response.json())
                 .then(data => {
@@ -30,38 +49,48 @@
                     data.forEach((row, index) => {
                         const option = document.createElement('option');
                         option.value = index; // Armazena o índice da linha
-                        option.textContent = `${row[0]} - ${row[1]}`; // Nome do paciente e data
+                        option.textContent = `${row[0]} - ${row[1]}`; // Nome do paciente e Data do Agendamento
                         select.appendChild(option);
                     });
-                })
-                .catch(error => {
-                    console.error('Erro ao buscar dados:', error);
-                    alert('Ocorreu um erro ao buscar os dados.');
                 });
         });
 
-        // Código para gerar o comprovante
+        // Função para gerar o comprovante
         document.querySelector('.btn.small').addEventListener('click', function() {
             const selectedIndex = document.getElementById('selectCadastro').value;
 
             if (selectedIndex) {
-                const scriptURL = `https://script.google.com/macros/s/AKfycbw104KtxnwYc-mBv9f9UGbhSQHe-bbo73XijehzPk2HbUm3xWEXqz76dnVwJzPKSK75/exec?index=${selectedIndex}`; // Substitua pelo URL do seu script
+                fetch(`${scriptURL}?index=${selectedIndex}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Separa cada item nos campos corretos
+                        const nomePaciente = data[0]; // Nome
+                        const dataAgendamento = data[1]; // Data do Agendamento
+                        const endereco = data[2]; // Endereço
+                        const destino = data[3]; // Destino
+                        const acompanhante = data[4]; // Acompanhante
+                        const telefone = data[5]; // Telefone
 
-                fetch(scriptURL)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Erro na resposta da rede');
-                        }
-                        return response.text();
-                    })
-                    .then(result => {
-                        const newWindow = window.open();
-                        newWindow.document.write(result);
-                        newWindow.document.close();
-                        newWindow.print(); // Abre a janela de impressão
+                        // Gera o HTML para o comprovante
+                        const comprovanteHTML = `
+                            <div class="comprovante">
+                                <h1>Comprovante de Viagem</h1>
+                                <div class="info">
+                                    <label>Nome do Paciente:</label> <span>${nomePaciente}</span>
+                                    <label>Data do Agendamento:</label> <span>${dataAgendamento}</span>
+                                    <label>Endereço:</label> <span>${endereco}</span>
+                                    <label>Destino:</label> <span>${destino}</span>
+                                    <label>Acompanhante:</label> <span>${acompanhante}</span>
+                                    <label>Telefone:</label> <span>${telefone}</span>
+                                </div>
+                            </div>
+                        `;
+
+                        // Adiciona o comprovante ao container
+                        document.getElementById('comprovanteContainer').innerHTML = comprovanteHTML;
                     })
                     .catch(error => {
-                        console.error('Erro ao gerar comprovante:', error);
+                        console.error('Erro ao gerar o comprovante:', error);
                         alert('Ocorreu um erro ao gerar o comprovante: ' + error.message);
                     });
             } else {

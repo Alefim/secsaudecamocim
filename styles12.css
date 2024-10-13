@@ -1,0 +1,63 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+h2 {
+    color: #666;
+}
+
+label {
+    display: block;
+    margin: 8px 0 4px; /* Diminui a margem */
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="time"],
+select {
+    width: 100%;
+    padding: 8px; /* Diminui o padding */
+    margin: 4px 0 12px; /* Diminui a margem */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 12px; /* Diminui o padding do botão */
+    margin: 4px; /* Diminui a margem do botão */
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+select {
+    appearance: none; /* Remove default arrow */
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABhElEQVR42mP8////fgAiD//7T2DMT9AACDA5wESAkBoAAADsADgO6D/wAAAAAElFTkSuQmCC') no-repeat right;
+    background-size: 12px;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    button {
+        width: 100%;
+    }
+}

@@ -1,201 +1,159 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Cadastro</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+    <link rel="stylesheet" href="styles12.css">
+    <title>Editar Cadastro de Pacientes</title>
+    <script>
+        function carregarDados() {
+            const select = document.getElementById('selectCadastro');
+            const rowIndex = select.value;
+
+            if (!rowIndex) {
+                alert('Selecione um cadastro para editar.');
+                return;
+            }
+
+            const scriptURL = 'https://script.google.com/macros/s/AKfycby3W7Y1_uyEZtNWQEw_m7nM7RCLIw8Rk3kbOWq14WGoI09XzTQ3S45poqZUYc8-e5U/exec';
+            fetch(`${scriptURL}?method=GET&id=${rowIndex}`)
+                .then(response => response.json())
+                .then(cadastro => {
+                    document.getElementById('nomePaciente').value = cadastro.nomePaciente || '';
+                    document.getElementById('telefone').value = cadastro.telefone || '';
+                    document.getElementById('dataAgendamento').value = cadastro.dataAgendamento || '';
+                    document.getElementById('horario').value = cadastro.horario || '';
+                    document.getElementById('motorista').value = cadastro.motorista || '';
+                    document.getElementById('especialidade').value = cadastro.especialidade || '';
+                    document.getElementById('tipoCarro').value = cadastro.tipoCarro || '';
+                    document.getElementById('destino').value = cadastro.destino || '';
+                    document.getElementById('acompanhante').value = cadastro.acompanhante || '';
+                    document.getElementById('retorno').value = cadastro.retorno || '';
+                    document.getElementById('observacoes').value = cadastro.observacoes || '';
+                })
+                .catch(error => console.error('Erro ao carregar dados:', error));
         }
-        h1 {
-            text-align: center;
+
+        function atualizarCadastro() {
+            const select = document.getElementById('selectCadastro');
+            const rowIndex = select.value;
+
+            const scriptURL = 'https://script.google.com/macros/s/AKfycby3W7Y1_uyEZtNWQEw_m7nM7RCLIw8Rk3kbOWq14WGoI09XzTQ3S45poqZUYc8-e5U/exec';
+            const formData = new FormData();
+            formData.append('method', 'POST');
+            formData.append('rowIndex', rowIndex);
+            formData.append('nomePaciente', document.getElementById('nomePaciente').value);
+            formData.append('telefone', document.getElementById('telefone').value);
+            formData.append('dataAgendamento', document.getElementById('dataAgendamento').value);
+            formData.append('horario', document.getElementById('horario').value);
+            formData.append('motorista', document.getElementById('motorista').value);
+            formData.append('especialidade', document.getElementById('especialidade').value);
+            formData.append('tipoCarro', document.getElementById('tipoCarro').value);
+            formData.append('destino', document.getElementById('destino').value);
+            formData.append('acompanhante', document.getElementById('acompanhante').value);
+            formData.append('retorno', document.getElementById('retorno').value);
+            formData.append('observacoes', document.getElementById('observacoes').value);
+
+            fetch(scriptURL, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(result => {
+                alert(result);
+                carregarCadastros(); 
+            })
+            .catch(error => console.error('Erro ao atualizar cadastro:', error));
         }
-        form {
-            margin-top: 20px;
-            display: none; /* Inicialmente escondido */
+
+        function excluirCadastro() {
+            const select = document.getElementById('selectCadastro');
+            const rowIndex = select.value;
+
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxuMH-9mML78h_8cmGWEVXfG5zlFnAIqwUd7lop3zA5KR63TYmT2v2zW9sM8q5uwjv3/exec';
+            const formData = new FormData();
+            formData.append('method', 'DELETE'); // Certifique-se de que isso está correto
+            formData.append('rowIndex', rowIndex); // Verifique se rowIndex está definido
+
+            fetch(scriptURL, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(result => {
+                alert(result);
+                carregarCadastros();
+            })
+            .catch(error => console.error('Erro ao excluir cadastro:', error));
         }
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
+
+        window.onload = carregarCadastros;
+
+        function carregarCadastros() {
+            const scriptURL = 'https://script.google.com/macros/s/AKfycby3W7Y1_uyEZtNWQEw_m7nM7RCLIw8Rk3kbOWq14WGoI09XzTQ3S45poqZUYc8-e5U/exec';
+            fetch(scriptURL + '?method=GET')
+                .then(response => response.json())
+                .then(cadastros => {
+                    const select = document.getElementById('selectCadastro');
+                    select.innerHTML = '';
+                    cadastros.forEach(cadastro => {
+                        const option = document.createElement('option');
+                        option.value = cadastro.rowIndex;
+                        option.textContent = `${cadastro.nomePaciente} - ${cadastro.telefone}`;
+                        select.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Erro ao carregar cadastros:', error));
         }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
+
+        function voltarParaIndex() {
+            window.location.href = 'index.html'; // Altere para o caminho correto do seu index.html
         }
-        button {
-            padding: 10px 15px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
+    </script>
 </head>
 <body>
-    <h1>Editar Cadastro</h1>
-
-    <!-- Campo de pesquisa -->
-    <label for="pesquisa">Pesquisar Cadastro (Nome, CPF ou Destino):</label>
-    <input type="text" id="pesquisa" placeholder="Digite o nome, CPF ou destino">
-    <button id="btnPesquisar">Pesquisar</button>
-
-    <label for="selectCadastroEditar">Selecione um cadastro para editar:</label>
-    <select id="selectCadastroEditar">
-        <option value="">Selecione...</option>
+    <h1>Gerenciar Cadastros de Pacientes</h1>
+    <label for="selectCadastro">Selecione um cadastro:</label>
+    <select id="selectCadastro" onchange="carregarDados()">
+        <option value="">-- Selecione --</option>
     </select>
+    <br><br>
 
-    <form id="formEditarCadastro">
-        <h2>Dados do Cadastro</h2>
+    <h2>Dados do Paciente</h2>
+    <label for="nomePaciente">Nome:</label>
+    <input type="text" id="nomePaciente" /><br/>
 
-        <!-- Ordem dos campos ajustada -->
-        <label for="nomePaciente">Nome do Paciente:</label>
-        <input type="text" id="nomePaciente" required>
-        
-        <label for="telefone">Telefone:</label>
-        <input type="tel" id="telefone" required>
-        
-        <label for="dataAgendamento">Data do Agendamento:</label>
-        <input type="date" id="dataAgendamento" required>
-        
-        <label for="horario">Horário:</label>
-        <input type="time" id="horario" required>
-        
-        <label for="motorista">Motorista:</label>
-        <input type="text" id="motorista" required>
-        
-        <label for="especialidade">Especialidade:</label>
-        <input type="text" id="especialidade" required>
-        
-        <label for="tipoCarro">Tipo de Carro:</label>
-        <input type="text" id="tipoCarro" required>
-        
-        <label for="destino">Destino:</label>
-        <input type="text" id="destino" required>
-        
-        <label for="acompanhante">Acompanhante:</label>
-        <input type="text" id="acompanhante">
-        
-        <label for="retorno">Retorno:</label>
-        <input type="text" id="retorno">
+    <label for="telefone">Telefone:</label>
+    <input type="text" id="telefone" /><br/>
 
-        <button type="submit">Salvar Edição</button>
-    </form>
+    <label for="dataAgendamento">Data de Agendamento:</label>
+    <input type="date" id="dataAgendamento" /><br/>
 
-    <script>
-        // URL do Google Apps Script
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbz35ifj2Y4wrM6ruPDk37jCClWQY2LavltDNATfeJMx59a-62-1EeHQs3SrVDL_PIvR/exec'; // Altere para o seu URL
+    <label for="horario">Horário:</label>
+    <input type="time" id="horario" /><br/>
 
-        // Variável para armazenar todos os cadastros
-        let todosCadastros = [];
+    <label for="motorista">Motorista:</label>
+    <input type="text" id="motorista" /><br/>
 
-        // Função para carregar os cadastros da planilha
-        function carregarCadastros() {
-            fetch(scriptURL)
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Dados carregados:", data); // Log dos dados carregados
-                    todosCadastros = data; // Armazena todos os cadastros
-                    atualizarSelect(todosCadastros); // Atualiza o select com todos os cadastros
-                })
-                .catch(error => {
-                    console.error('Erro ao carregar cadastros:', error);
-                });
-        }
+    <label for="especialidade">Especialidade:</label>
+    <input type="text" id="especialidade" /><br/>
 
-        // Atualiza o select com os dados fornecidos
-        function atualizarSelect(cadastros) {
-            const select = document.getElementById('selectCadastroEditar');
-            select.innerHTML = ''; // Limpa opções existentes
-            cadastros.forEach(cadastro => {
-                const nomePaciente = cadastro.nomePaciente || 'Nome não definido';
-                const dataAgendamento = cadastro.dataAgendamento || 'Data não definida';
-                
-                const option = document.createElement('option');
-                option.value = cadastro.id; // Altere aqui se o ID estiver em outro campo
-                option.textContent = `${nomePaciente} - ${dataAgendamento}`;
-                select.appendChild(option);
-            });
-        }
+    <label for="tipoCarro">Tipo de Carro:</label>
+    <input type="text" id="tipoCarro" /><br/>
 
-        // Quando um cadastro é selecionado, preenche o formulário com os dados
-        document.getElementById('selectCadastroEditar').addEventListener('change', function() {
-            const id = this.value;
+    <label for="destino">Destino:</label>
+    <input type="text" id="destino" /><br/>
 
-            if (id) {
-                fetch(scriptURL + '?id=' + id)
-                    .then(response => response.json())
-                    .then(cadastroSelecionado => {
-                        // Preencher os campos do formulário
-                        document.getElementById('nomePaciente').value = cadastroSelecionado.nomePaciente || '';
-                        document.getElementById('telefone').value = cadastroSelecionado.telefone || '';
-                        document.getElementById('dataAgendamento').value = cadastroSelecionado.dataAgendamento || '';
-                        document.getElementById('horario').value = cadastroSelecionado.horario || '';
-                        document.getElementById('motorista').value = cadastroSelecionado.motorista || '';
-                        document.getElementById('especialidade').value = cadastroSelecionado.especialidade || '';
-                        document.getElementById('tipoCarro').value = cadastroSelecionado.tipoCarro || '';
-                        document.getElementById('destino').value = cadastroSelecionado.destino || '';
-                        document.getElementById('acompanhante').value = cadastroSelecionado.acompanhante || '';
-                        document.getElementById('retorno').value = cadastroSelecionado.retorno || '';
+    <label for="acompanhante">Acompanhante:</label>
+    <input type="text" id="acompanhante" /><br/>
 
-                        // Exibir o formulário
-                        document.getElementById('formEditarCadastro').style.display = 'block';
-                    })
-                    .catch(error => {
-                        console.error('Erro ao carregar cadastro selecionado:', error);
-                    });
-            } else {
-                // Se nenhuma opção for selecionada, esconder o formulário
-                document.getElementById('formEditarCadastro').style.display = 'none';
-            }
-        });
+    <label for="retorno">Retorno:</label>
+    <input type="text" id="retorno" /><br/>
 
-        // Lógica para salvar as edições
-        document.getElementById('formEditarCadastro').addEventListener('submit', function(e) {
-            e.preventDefault(); // Previne o comportamento padrão do formulário
+    <label for="observacoes">Observações:</label>
+    <input type="text" id="observacoes" /><br/>
 
-            // Captura os dados do formulário
-            const formData = new FormData(this);
-            const id = document.getElementById('selectCadastroEditar').value;
-
-            // Adiciona o ID ao FormData
-            formData.append('id', id);
-
-            // Envie os dados para seu Google Apps Script ou API
-            fetch(scriptURL + '?method=POST', { method: 'POST', body: formData })
-                .then(response => response.text())
-                .then(result => {
-                    alert(result); // Mostra mensagem de sucesso
-                    // Limpar o formulário após o envio
-                    document.getElementById('formEditarCadastro').reset();
-                    document.getElementById('formEditarCadastro').style.display = 'none';
-                    carregarCadastros(); // Recarrega os cadastros após a edição
-                })
-                .catch(error => {
-                    console.error('Erro ao salvar edição:', error);
-                    alert('Ocorreu um erro ao salvar a edição.');
-                });
-        });
-
-        // Função para pesquisar cadastros
-        document.getElementById('btnPesquisar').addEventListener('click', function() {
-            const pesquisa = document.getElementById('pesquisa').value.toLowerCase(); // Captura o valor da pesquisa
-            const resultados = todosCadastros.filter(cadastro => {
-                return cadastro.nomePaciente.toLowerCase().includes(pesquisa) ||
-                       cadastro.cpf && cadastro.cpf.includes(pesquisa) || // Adicione a condição para CPF
-                       cadastro.destino.toLowerCase().includes(pesquisa); // Adicione a condição para Destino
-            });
-            atualizarSelect(resultados); // Atualiza o select com os resultados filtrados
-        });
-
-        // Carregar os cadastros ao abrir a página
-        window.onload = carregarCadastros;
-    </script>
+    <br/>
+    <button onclick="atualizarCadastro()">Atualizar Cadastro</button>
+    <button onclick="excluirCadastro()">Excluir Cadastro</button>
+    <button onclick="voltarParaIndex()">Voltar para o Início</button>
 </body>
 </html>
