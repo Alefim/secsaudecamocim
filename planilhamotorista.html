@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Planilha de Viagem</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Gerador de Planilha de Viagem</h1>
+
+    <div class="input-group">
+        <label for="motorista">Selecione o Motorista:</label>
+        <select id="motorista"></select>
+    </div>
+
+    <div class="input-group">
+        <label for="destino">Selecione o Destino:</label>
+        <select id="destino"></select>
+    </div>
+
+    <button class="btn" id="btnGerarPlanilha">Gerar Planilha</button>
+</div>
+
+<script>
+    // URL do Google Apps Script
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyb2Gl_90sdE-Md2al87nU86LA92VvrDhLx0IKMzLDglWBcKUNEMLU39SB5CJjmq819/exec';
+
+    // Função para buscar os dados da planilha e preencher os selects
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch(scriptURL)
+            .then(response => response.json())
+            .then(data => {
+                const motoristaSelect = document.getElementById('motorista');
+                const destinoSelect = document.getElementById('destino');
+
+                // Preenchendo o select de motoristas
+                data.motoristas.forEach((motorista, index) => {
+                    const option = document.createElement('option');
+                    option.value = index; // Armazena o índice da linha
+                    option.textContent = motorista[0]; // Nome do motorista
+                    motoristaSelect.appendChild(option);
+                });
+
+                // Preenchendo o select de destinos
+                data.destinos.forEach((destino, index) => {
+                    const option = document.createElement('option');
+                    option.value = index; // Armazena o índice da linha
+                    option.textContent = destino[0]; // Nome do destino
+                    destinoSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Erro ao carregar os dados:', error));
+    });
+
+    // Função para gerar a planilha
+    document.getElementById('btnGerarPlanilha').addEventListener('click', function() {
+        const motoristaIndex = document.getElementById('motorista').value;
+        const destinoIndex = document.getElementById('destino').value;
+
+        if (motoristaIndex !== '' && destinoIndex !== '') {
+            fetch(`${scriptURL}?motoristaIndex=${motoristaIndex}&destinoIndex=${destinoIndex}`)
+                .then(response => response.json())
+                .then(data => {
+                    const planilhaData = data.map(row => ({
+                        Nome: row[0],
+                        Data: row[1],
+                        Endereço: row[2],
+                        Destino: row[3],
+                        Acompanhante: row[4],
+                        Telefone: row[5],
+                    }));
+
+                    // Criação de uma nova planilha usando a biblioteca SheetJS (xlsx)
+                    const wb = XLSX.utils.book_new();
+                    const ws = XLSX.utils.json_to_sheet(planilhaData);
+                    XLSX.utils.book_append_sheet(wb, ws, "Viagens");
+
+                    // Gera um arquivo .xlsx
+                    XLSX.writeFile(wb, 'viagens_motorista.xlsx');
+                })
+                .catch(error => {
+                    console.error('Erro ao gerar a planilha:', error);
+                    alert('Erro ao gerar a planilha. Tente novamente.');
+                });
+        } else {
+            alert('Por favor, selecione um motorista e um destino.');
+        }
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+</body>
+</html>
