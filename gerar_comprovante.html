@@ -3,100 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerar Comprovante</title>
+    <title>Gerar Comprovante de Viagem</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
+            padding: 20px;
         }
-        .comprovante {
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
             background-color: #fff;
             padding: 20px;
-            border-radius: 5px;
+            border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
         }
-        .info label {
+        h1 {
+            text-align: center;
+        }
+        label {
             font-weight: bold;
         }
-        .info span {
-            display: block;
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .comprovante {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .comprovante h2 {
+            text-align: center;
+        }
+        .comprovante .info {
             margin-bottom: 10px;
+        }
+        .comprovante .info label {
+            font-weight: bold;
+            display: block;
         }
     </style>
 </head>
 <body>
 
-    <h1>Gerar Comprovante</h1>
+<div class="container">
+    <h1>Gerar Comprovante de Viagem</h1>
     
-    <select id="selectCadastro">
-        <!-- Opções preenchidas via JavaScript -->
-    </select>
-    <button class="btn small">Gerar Comprovante</button>
+    <div class="input-group">
+        <label for="nome">Nome do Paciente</label>
+        <input type="text" id="nome" placeholder="Digite o nome do paciente">
+    </div>
+    
+    <div class="input-group">
+        <label for="data">Data do Agendamento</label>
+        <input type="date" id="data">
+    </div>
 
-    <div id="comprovanteContainer"></div>
+    <div class="input-group">
+        <label for="endereco">Endereço</label>
+        <input type="text" id="endereco" placeholder="Digite o endereço">
+    </div>
 
-    <script>
-        // URL do Google Apps Script
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbwDInq5ZvvkaeGaUhNlDPMXRv0HPsLgt_Flb9pUzyumqr0xW6NsUHB86-grd8HS0d6g/exec';
+    <div class="input-group">
+        <label for="destino">Destino</label>
+        <input type="text" id="destino" placeholder="Digite o destino">
+    </div>
 
-        // Função para buscar os dados da planilha e preencher o select
-        document.addEventListener('DOMContentLoaded', function() {
-            fetch(scriptURL)
-                .then(response => response.json())
-                .then(data => {
-                    const select = document.getElementById('selectCadastro');
-                    data.forEach((row, index) => {
-                        const option = document.createElement('option');
-                        option.value = index; // Armazena o índice da linha
-                        option.textContent = `${row[0]} - ${row[1]}`; // Nome do paciente e Data do Agendamento
-                        select.appendChild(option);
-                    });
-                });
-        });
+    <div class="input-group">
+        <label for="acompanhante">Acompanhante</label>
+        <input type="text" id="acompanhante" placeholder="Digite o nome do acompanhante">
+    </div>
 
-        // Função para gerar o comprovante
-        document.querySelector('.btn.small').addEventListener('click', function() {
-            const selectedIndex = document.getElementById('selectCadastro').value;
+    <div class="input-group">
+        <label for="telefone">Telefone</label>
+        <input type="text" id="telefone" placeholder="Digite o telefone">
+    </div>
 
-            if (selectedIndex) {
-                fetch(`${scriptURL}?index=${selectedIndex}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Separa cada item nos campos corretos
-                        const nomePaciente = data[0]; // Nome
-                        const dataAgendamento = data[1]; // Data do Agendamento
-                        const endereco = data[2]; // Endereço
-                        const destino = data[3]; // Destino
-                        const acompanhante = data[4]; // Acompanhante
-                        const telefone = data[5]; // Telefone
+    <button class="btn" onclick="gerarComprovante()">Gerar Comprovante</button>
 
-                        // Gera o HTML para o comprovante
-                        const comprovanteHTML = `
-                            <div class="comprovante">
-                                <h1>Comprovante de Viagem</h1>
-                                <div class="info">
-                                    <label>Nome do Paciente:</label> <span>${nomePaciente}</span>
-                                    <label>Data do Agendamento:</label> <span>${dataAgendamento}</span>
-                                    <label>Endereço:</label> <span>${endereco}</span>
-                                    <label>Destino:</label> <span>${destino}</span>
-                                    <label>Acompanhante:</label> <span>${acompanhante}</span>
-                                    <label>Telefone:</label> <span>${telefone}</span>
-                                </div>
-                            </div>
-                        `;
+    <div id="comprovanteContainer" class="comprovante" style="display: none;">
+        <h2>Comprovante de Viagem</h2>
+        <div class="info">
+            <label>Nome do Paciente:</label>
+            <span id="comprovanteNome"></span>
+        </div>
+        <div class="info">
+            <label>Data do Agendamento:</label>
+            <span id="comprovanteData"></span>
+        </div>
+        <div class="info">
+            <label>Endereço:</label>
+            <span id="comprovanteEndereco"></span>
+        </div>
+        <div class="info">
+            <label>Destino:</label>
+            <span id="comprovanteDestino"></span>
+        </div>
+        <div class="info">
+            <label>Acompanhante:</label>
+            <span id="comprovanteAcompanhante"></span>
+        </div>
+        <div class="info">
+            <label>Telefone:</label>
+            <span id="comprovanteTelefone"></span>
+        </div>
+    </div>
+</div>
 
-                        // Adiciona o comprovante ao container
-                        document.getElementById('comprovanteContainer').innerHTML = comprovanteHTML;
-                    })
-                    .catch(error => {
-                        console.error('Erro ao gerar o comprovante:', error);
-                        alert('Ocorreu um erro ao gerar o comprovante: ' + error.message);
-                    });
-            } else {
-                alert('Por favor, selecione um cadastro.');
-            }
-        });
-    </script>
+<script>
+    function gerarComprovante() {
+        // Pegar os valores dos campos
+        const nome = document.getElementById('nome').value || 'Não informado';
+        const data = document.getElementById('data').value || 'Não informado';
+        const endereco = document.getElementById('endereco').value || 'Não informado';
+        const destino = document.getElementById('destino').value || 'Não informado';
+        const acompanhante = document.getElementById('acompanhante').value || 'Não informado';
+        const telefone = document.getElementById('telefone').value || 'Não informado';
+
+        // Exibir os valores no comprovante
+        document.getElementById('comprovanteNome').textContent = nome;
+        document.getElementById('comprovanteData').textContent = data;
+        document.getElementById('comprovanteEndereco').textContent = endereco;
+        document.getElementById('comprovanteDestino').textContent = destino;
+        document.getElementById('comprovanteAcompanhante').textContent = acompanhante;
+        document.getElementById('comprovanteTelefone').textContent = telefone;
+
+        // Mostrar o comprovante
+        document.getElementById('comprovanteContainer').style.display = 'block';
+    }
+</script>
+
 </body>
 </html>
