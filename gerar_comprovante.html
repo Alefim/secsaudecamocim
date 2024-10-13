@@ -28,20 +28,22 @@
             margin-bottom: 15px;
         }
         .input-group input {
-            width: 100%;
+            width: 95%;
             padding: 10px;
             margin-top: 5px;
             border-radius: 4px;
             border: 1px solid #ccc;
         }
         .btn {
-            width: 100%;
+            width: 48%;
             padding: 10px;
             background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            margin-top: 10px;
+            font-size: 16px;
         }
         .btn:hover {
             background-color: #45a049;
@@ -52,6 +54,7 @@
             background-color: #f9f9f9;
             border: 1px solid #ddd;
             border-radius: 5px;
+            display: none; /* Inicialmente escondido */
         }
         .comprovante h2 {
             text-align: center;
@@ -63,11 +66,22 @@
             font-weight: bold;
             display: block;
         }
+
+        /* CSS para ocultar botões durante a impressão */
+        @media print {
+            .btn {
+                display: none; /* Oculta os botões ao imprimir */
+            }
+            .container {
+                margin: 0; /* Remove margens para impressão */
+                box-shadow: none; /* Remove sombra para impressão */
+            }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="cadastroForm">
     <h1>Gerar Comprovante de Viagem</h1>
     
     <div class="input-group">
@@ -101,33 +115,38 @@
     </div>
 
     <button class="btn" onclick="gerarComprovante()">Gerar Comprovante</button>
+</div>
 
-    <div id="comprovanteContainer" class="comprovante" style="display: none;">
-        <h2>Comprovante de Viagem</h2>
-        <div class="info">
-            <label>Nome do Paciente:</label>
-            <span id="comprovanteNome"></span>
-        </div>
-        <div class="info">
-            <label>Data do Agendamento:</label>
-            <span id="comprovanteData"></span>
-        </div>
-        <div class="info">
-            <label>Endereço:</label>
-            <span id="comprovanteEndereco"></span>
-        </div>
-        <div class="info">
-            <label>Destino:</label>
-            <span id="comprovanteDestino"></span>
-        </div>
-        <div class="info">
-            <label>Acompanhante:</label>
-            <span id="comprovanteAcompanhante"></span>
-        </div>
-        <div class="info">
-            <label>Telefone:</label>
-            <span id="comprovanteTelefone"></span>
-        </div>
+<div id="comprovanteContainer" class="comprovante">
+    <h2>Comprovante de Viagem</h2>
+    <div class="info">
+        <label>Nome do Paciente:</label>
+        <span id="comprovanteNome"></span>
+    </div>
+    <div class="info">
+        <label>Data do Agendamento:</label>
+        <span id="comprovanteData"></span>
+    </div>
+    <div class="info">
+        <label>Endereço:</label>
+        <span id="comprovanteEndereco"></span>
+    </div>
+    <div class="info">
+        <label>Destino:</label>
+        <span id="comprovanteDestino"></span>
+    </div>
+    <div class="info">
+        <label>Acompanhante:</label>
+        <span id="comprovanteAcompanhante"></span>
+    </div>
+    <div class="info">
+        <label>Telefone:</label>
+        <span id="comprovanteTelefone"></span>
+    </div>
+
+    <div class="btn-container">
+        <button class="btn" onclick="voltarTelaCadastro()">Voltar para Tela de Cadastro</button>
+        <button class="btn" onclick="imprimirComprovante()">Imprimir Comprovante</button>
     </div>
 </div>
 
@@ -149,8 +168,20 @@
         document.getElementById('comprovanteAcompanhante').textContent = acompanhante;
         document.getElementById('comprovanteTelefone').textContent = telefone;
 
-        // Mostrar o comprovante
+        // Mostrar o comprovante e esconder o formulário
         document.getElementById('comprovanteContainer').style.display = 'block';
+        document.getElementById('cadastroForm').style.display = 'none';
+    }
+
+    function imprimirComprovante() {
+        // Função para imprimir o comprovante
+        window.print();
+    }
+
+    function voltarTelaCadastro() {
+        // Voltar para a tela de cadastro
+        document.getElementById('comprovanteContainer').style.display = 'none';
+        document.getElementById('cadastroForm').style.display = 'block';
     }
 </script>
 

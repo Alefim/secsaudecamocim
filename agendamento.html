@@ -4,47 +4,144 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendamento de Viagem</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="icons8-ambulância-16.ico" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 10px; /* Espaço entre os botões */
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .info {
+            margin-top: 20px;
+            display: none; /* Inicialmente oculto */
+        }
+        .info h2 {
+            text-align: center;
+        }
+        @media print {
+            #btnImprimir, #btnPesquisar {
+                display: none; /* Esconder botões na impressão */
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Agendamento de Viagem</h1>
 
-        <table class="agendamento-table">
-            <thead>
-                <tr>
-                    <th>Passageiros</th>
-                    <th>Observações</th>
-                    <th>Endereço do Domicílio</th>
-                    <th>Contato</th>
-                    <th>Destino da Viagem</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><input type="text" name="passageiros" placeholder="Nome dos Passageiros"></td>
-                    <td><input type="text" name="observacoes" placeholder="Observações"></td>
-                    <td><input type="text" name="enderecoDomicilio" placeholder="Endereço do Domicílio"></td>
-                    <td><input type="text" name="contato" placeholder="Contato"></td>
-                    <td><input type="text" name="destinoViagem" placeholder="Destino da Viagem"></td>
-                </tr>
-            </tbody>
-        </table>
+<div class="container">
+    <h1>Agendamento de Viagem</h1>
 
-        <div class="form-group">
-            <button type="submit" class="btn small">Salvar Agendamento</button>
-        </div>
-
-        <div class="additional-buttons">
-            <a href="index.html" class="btn">Voltar ao Cadastro de Viagem</a>
-        </div>
+    <div class="input-group">
+        <label for="pacientes">Selecione o Paciente:</label>
+        <select id="pacientes"></select>
     </div>
 
-    <script>
-        document.querySelector('.btn.small').addEventListener('click', function() {
-            alert("Agendamento salvo com sucesso!");
-        });
-    </script>
+    <button class="btn" id="btnPesquisar">Pesquisar</button>
+    <button class="btn" id="btnImprimir" style="display: none;">Imprimir Agendamento</button> <!-- Botão de imprimir -->
+
+    <div class="info" id="infoPaciente">
+        <h2>Dados do Paciente</h2>
+        <p><strong>Nome:</strong> <span id="nomePaciente"></span></p>
+        <p><strong>Data do Agendamento:</strong> <span id="dataAgendamento"></span></p>
+        <p><strong>Endereço:</strong> <span id="endereco"></span></p>
+        <p><strong>Destino:</strong> <span id="destino"></span></p>
+        <p><strong>Acompanhante:</strong> <span id="acompanhante"></span></p>
+        <p><strong>Telefone:</strong> <span id="telefone"></span></p>
+    </div>
+</div>
+
+<script>
+    // URL do Google Apps Script (cole a URL que você copiou aqui)
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzF2gJRBBJZiCs2pb9cWmvl8AVKPAw78DyMaQudyLxP5cqcjl8E-4w6pb42pJSDHMgy/exec';
+
+    // Função para buscar os dados da planilha e preencher o select
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch(scriptURL)
+            .then(response => response.json())
+            .then(data => {
+                const select = document.getElementById('pacientes');
+                data.forEach((row, index) => {
+                    const option = document.createElement('option');
+                    option.value = index; // Armazena o índice da linha
+                    option.textContent = `${row[0]} - ${row[1]}`; // Nome do paciente e Data do Agendamento
+                    select.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Erro ao carregar os dados:', error));
+    });
+
+    // Função para pesquisar e exibir os dados do paciente
+    document.getElementById('btnPesquisar').addEventListener('click', function() {
+        const selectedIndex = document.getElementById('pacientes').value;
+
+        if (selectedIndex !== '') {
+            fetch(scriptURL)
+                .then(response => response.json())
+                .then(data => {
+                    const pacienteData = data[selectedIndex];
+                    
+                    // Preenche as informações
+                    document.getElementById('nomePaciente').textContent = pacienteData[0] || 'Não informado';
+                    document.getElementById('dataAgendamento').textContent = pacienteData[1] || 'Não informado';
+                    document.getElementById('endereco').textContent = pacienteData[2] || 'Não informado';
+                    document.getElementById('destino').textContent = pacienteData[3] || 'Não informado';
+                    document.getElementById('acompanhante').textContent = pacienteData[4] || 'Não informado';
+                    document.getElementById('telefone').textContent = pacienteData[5] || 'Não informado';
+
+                    // Exibir informações do paciente
+                    document.getElementById('infoPaciente').style.display = 'block';
+                    document.getElementById('btnImprimir').style.display = 'block'; // Mostrar o botão de imprimir
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar os dados do paciente:', error);
+                    alert('Erro ao buscar os dados do paciente. Tente novamente.');
+                });
+        } else {
+            alert('Por favor, selecione um paciente.');
+        }
+    });
+
+    // Função para imprimir o agendamento
+    document.getElementById('btnImprimir').addEventListener('click', function() {
+        window.print();
+    });
+</script>
+
 </body>
 </html>
