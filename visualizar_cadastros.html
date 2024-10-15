@@ -76,6 +76,15 @@
             background-color: #ddd;
         }
 
+        .edit-btn {
+            background-color: #FFA500;
+            color: white;
+            padding: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 3px;
+        }
+
         @media screen and (max-width: 768px) {
             table {
                 font-size: 14px;
@@ -125,6 +134,7 @@
                 <th>Acompanhante</th>
                 <th>Retorno</th>
                 <th>Observações</th>
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -133,40 +143,38 @@
     </table>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbwiWxVBbBgc_hZ2-QSx9SZblQZljEGc10j1qFj8H3FMFfU49f9oEEvHzC4Nyhs3xDs/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwiWxVBbBgc_hZ2-QSx9SZblQZljEGc10j1qFj8H3FMFfU49f9oEEvHzC4Nyhs3xDs/exec';
 
+        document.addEventListener('DOMContentLoaded', () => {
             fetch(scriptURL)
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Dados recebidos:', data);
                     const tbody = document.querySelector('#tabelaCadastros tbody');
                     tbody.innerHTML = '';
 
-                    data.forEach(row => {
+                    data.forEach((row, index) => {
                         const tr = document.createElement('tr');
                         const colunas = [
-                            'nomePaciente',
-                            'cartaoSUS',
-                            'cpf',
-                            'endereco',
-                            'telefone',
-                            'dataAgendamento',
-                            'horario',
-                            'motorista',
-                            'especialidade',
-                            'tipoCarro',
-                            'destino',
-                            'acompanhante',
-                            'retorno',
-                            'observacoes'
+                            'nomePaciente', 'cartaoSUS', 'cpf', 'endereco',
+                            'telefone', 'dataAgendamento', 'horario', 'motorista',
+                            'especialidade', 'tipoCarro', 'destino', 'acompanhante',
+                            'retorno', 'observacoes'
                         ];
 
-                        colunas.forEach((coluna) => {
+                        colunas.forEach(coluna => {
                             const td = document.createElement('td');
                             td.textContent = row[coluna] || '';
+                            td.setAttribute('contenteditable', 'false'); // Desativa edição por padrão
                             tr.appendChild(td);
                         });
+
+                        const tdAcoes = document.createElement('td');
+                        const btnEditar = document.createElement('button');
+                        btnEditar.textContent = 'Editar';
+                        btnEditar.classList.add('edit-btn');
+                        btnEditar.addEventListener('click', () => editarLinha(tr, index));
+                        tdAcoes.appendChild(btnEditar);
+                        tr.appendChild(tdAcoes);
 
                         tbody.appendChild(tr);
                     });
@@ -177,23 +185,89 @@
                 });
         });
 
+        function editarLinha(linha, index) {
+            const cells = linha.querySelectorAll('td');
+            
+            // Torna as células editáveis
+            cells.forEach((cell, i) => {
+                if (i < cells.length - 1) { // Exceto a célula de Ações
+                    cell.setAttribute('contenteditable', 'true');
+                    cell.style.backgroundColor = '#f0f8ff'; // Destaca a célula durante a edição
+                }
+            });
+
+            const btnSalvar = document.createElement('button');
+            btnSalvar.textContent = 'Salvar';
+            btnSalvar.classList.add('edit-btn');
+            btnSalvar.style.backgroundColor = '#4CAF50';
+            btnSalvar.addEventListener('click', () => salvarEdicao(linha, index));
+            cells[cells.length - 1].appendChild(btnSalvar); // Adiciona o botão de salvar
+        }
+
+        function salvarEdicao(linha, index) {
+            const cells = linha.querySelectorAll('td');
+            const dadosAtualizados = {
+                nomePaciente: cells[0].textContent,
+                cartaoSUS: cells[1].textContent,
+                cpf: cells[2].textContent,
+                endereco: cells[3].textContent,
+                telefone: cells[4].textContent,
+                dataAgendamento: cells[5].textContent,
+                horario: cells[6].textContent,
+                motorista: cells[7].textContent,
+                especialidade: cells[8].textContent,
+                tipoCarro: cells[9].textContent,
+                destino: cells[10].textContent,
+                acompanhante: cells[11].textContent,
+                retorno: cells[12].textContent,
+                observacoes: cells[13].textContent,
+                index: index // Envia o índice da linha
+            };
+
+            // Faz a requisição para atualizar os dados
+            fetch(scriptURL, {
+                method: 'POST',
+                body: JSON.stringify(dadosAtualizados),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.status === 'success') {
+                    alert('Dados atualizados com sucesso!');
+                    cells.forEach(cell => {
+                        cell.setAttribute('contenteditable', 'false'); // Desativa edição após salvar
+                        cell.style.backgroundColor = ''; // Remove o destaque
+                    });
+                } else {
+                    alert('Erro ao atualizar os dados: ' + result.message);
+                }
+            })
+            .catch(error => {
+    console.error('Erro ao atualizar dados:', error);
+    alert('Ocorreu um erro ao salvar as alterações: ' + error.message);
+});
+
+        }
+
         function filtrarPorNome() {
             const filtro = document.getElementById('filtroNome').value.toLowerCase();
             const linhas = document.querySelectorAll('#tabelaCadastros tbody tr');
 
             linhas.forEach(linha => {
-                const nome = linha.cells[0].textContent.toLowerCase();
-                linha.style.display = nome.includes(filtro) ? '' : 'none';
+                const nomePaciente = linha.cells[0].textContent.toLowerCase();
+                linha.style.display = nomePaciente.includes(filtro) ? '' : 'none';
             });
         }
 
         function filtrarPorData() {
-            const filtro = document.getElementById('filtroData').value;
+            const filtro = document.getElementById('filtroData').value.toLowerCase();
             const linhas = document.querySelectorAll('#tabelaCadastros tbody tr');
 
             linhas.forEach(linha => {
-                const data = linha.cells[5].textContent;
-                linha.style.display = data.includes(filtro) ? '' : 'none';
+                const dataAgendamento = linha.cells[5].textContent.toLowerCase();
+                linha.style.display = dataAgendamento.includes(filtro) ? '' : 'none';
             });
         }
 
@@ -218,52 +292,20 @@
         }
 
         function imprimirTabela() {
-            const tabelaOriginal = document.getElementById('tabelaCadastros');
-            const linhas = tabelaOriginal.querySelectorAll('tbody tr');
-
-            let tabelaParaImpressao = `
-                <table border="1" style="width: 100%; border-collapse: collapse;">
-                    <thead>
-                        <tr>
-                            <th>PASSAGEIROS</th>
-                            <th>OBS</th>
-                            <th>ENDEREÇO</th>
-                            <th>CONTATO</th>
-                            <th>DESTINO</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-
-            linhas.forEach(linha => {
-                if (linha.style.display !== 'none') {
-                    tabelaParaImpressao += '<tr>';
-                    tabelaParaImpressao += `<td>${linha.cells[0].textContent}</td>`;
-                    tabelaParaImpressao += `<td>${linha.cells[13].textContent}</td>`;
-                    tabelaParaImpressao += `<td>${linha.cells[3].textContent}</td>`;
-                    tabelaParaImpressao += `<td>${linha.cells[4].textContent}</td>`;
-                    tabelaParaImpressao += `<td>${linha.cells[10].textContent}</td>`;
-                    tabelaParaImpressao += '</tr>';
-                }
-            });
-
-            tabelaParaImpressao += `
-                    </tbody>
-                </table>
-            `;
-
-            const janelaImpressao = window.open('', '', 'height=600,width=800');
-            janelaImpressao.document.write('<html><head><title>Tabela de Impressão</title></head><body>');
-            janelaImpressao.document.write(tabelaParaImpressao);
-            janelaImpressao.document.write('</body></html>');
-            janelaImpressao.document.close();
-            janelaImpressao.print();
+            const tabela = document.getElementById('tabelaCadastros');
+            const novaJanela = window.open('', '', 'width=800,height=600');
+            novaJanela.document.write('<html><head><title>Imprimir Tabela</title>');
+            novaJanela.document.write('<link rel="stylesheet" href="styles1.css">'); // Link para o estilo
+            novaJanela.document.write('</head><body>');
+            novaJanela.document.write(tabela.outerHTML);
+            novaJanela.document.write('</body></html>');
+            novaJanela.document.close();
+            novaJanela.print();
         }
 
         function voltarParaCadastro() {
-            window.location.href = 'index.html';
+            window.location.href = "index.html"; // Altere para o nome correto do seu arquivo de cadastro
         }
     </script>
-
 </body>
 </html>
