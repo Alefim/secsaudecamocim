@@ -1,159 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <link rel="stylesheet" href="styles12.css">
-    <title>Editar Cadastro de Pacientes</title>
-    <script>
-        function carregarDados() {
-            const select = document.getElementById('selectCadastro');
-            const rowIndex = select.value;
-
-            if (!rowIndex) {
-                alert('Selecione um cadastro para editar.');
-                return;
-            }
-
-            const scriptURL = 'https://script.google.com/macros/s/AKfycby3W7Y1_uyEZtNWQEw_m7nM7RCLIw8Rk3kbOWq14WGoI09XzTQ3S45poqZUYc8-e5U/exec';
-            fetch(`${scriptURL}?method=GET&id=${rowIndex}`)
-                .then(response => response.json())
-                .then(cadastro => {
-                    document.getElementById('nomePaciente').value = cadastro.nomePaciente || '';
-                    document.getElementById('telefone').value = cadastro.telefone || '';
-                    document.getElementById('dataAgendamento').value = cadastro.dataAgendamento || '';
-                    document.getElementById('horario').value = cadastro.horario || '';
-                    document.getElementById('motorista').value = cadastro.motorista || '';
-                    document.getElementById('especialidade').value = cadastro.especialidade || '';
-                    document.getElementById('tipoCarro').value = cadastro.tipoCarro || '';
-                    document.getElementById('destino').value = cadastro.destino || '';
-                    document.getElementById('acompanhante').value = cadastro.acompanhante || '';
-                    document.getElementById('retorno').value = cadastro.retorno || '';
-                    document.getElementById('observacoes').value = cadastro.observacoes || '';
-                })
-                .catch(error => console.error('Erro ao carregar dados:', error));
-        }
-
-        function atualizarCadastro() {
-            const select = document.getElementById('selectCadastro');
-            const rowIndex = select.value;
-
-            const scriptURL = 'https://script.google.com/macros/s/AKfycby3W7Y1_uyEZtNWQEw_m7nM7RCLIw8Rk3kbOWq14WGoI09XzTQ3S45poqZUYc8-e5U/exec';
-            const formData = new FormData();
-            formData.append('method', 'POST');
-            formData.append('rowIndex', rowIndex);
-            formData.append('nomePaciente', document.getElementById('nomePaciente').value);
-            formData.append('telefone', document.getElementById('telefone').value);
-            formData.append('dataAgendamento', document.getElementById('dataAgendamento').value);
-            formData.append('horario', document.getElementById('horario').value);
-            formData.append('motorista', document.getElementById('motorista').value);
-            formData.append('especialidade', document.getElementById('especialidade').value);
-            formData.append('tipoCarro', document.getElementById('tipoCarro').value);
-            formData.append('destino', document.getElementById('destino').value);
-            formData.append('acompanhante', document.getElementById('acompanhante').value);
-            formData.append('retorno', document.getElementById('retorno').value);
-            formData.append('observacoes', document.getElementById('observacoes').value);
-
-            fetch(scriptURL, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(result => {
-                alert(result);
-                carregarCadastros(); 
-            })
-            .catch(error => console.error('Erro ao atualizar cadastro:', error));
-        }
-
-        function excluirCadastro() {
-            const select = document.getElementById('selectCadastro');
-            const rowIndex = select.value;
-
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbxuMH-9mML78h_8cmGWEVXfG5zlFnAIqwUd7lop3zA5KR63TYmT2v2zW9sM8q5uwjv3/exec';
-            const formData = new FormData();
-            formData.append('method', 'DELETE'); // Certifique-se de que isso está correto
-            formData.append('rowIndex', rowIndex); // Verifique se rowIndex está definido
-
-            fetch(scriptURL, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(result => {
-                alert(result);
-                carregarCadastros();
-            })
-            .catch(error => console.error('Erro ao excluir cadastro:', error));
-        }
-
-        window.onload = carregarCadastros;
-
-        function carregarCadastros() {
-            const scriptURL = 'https://script.google.com/macros/s/AKfycby3W7Y1_uyEZtNWQEw_m7nM7RCLIw8Rk3kbOWq14WGoI09XzTQ3S45poqZUYc8-e5U/exec';
-            fetch(scriptURL + '?method=GET')
-                .then(response => response.json())
-                .then(cadastros => {
-                    const select = document.getElementById('selectCadastro');
-                    select.innerHTML = '';
-                    cadastros.forEach(cadastro => {
-                        const option = document.createElement('option');
-                        option.value = cadastro.rowIndex;
-                        option.textContent = `${cadastro.nomePaciente} - ${cadastro.telefone}`;
-                        select.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Erro ao carregar cadastros:', error));
-        }
-
-        function voltarParaIndex() {
-            window.location.href = 'index.html'; // Altere para o caminho correto do seu index.html
-        }
-    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Cadastro de Viagem</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="icons8-ambulância-16.ico" type="image/x-icon">
+    <style>
+        /* Estilos para a página de edição */
+    </style>
 </head>
 <body>
-    <h1>Gerenciar Cadastros de Pacientes</h1>
-    <label for="selectCadastro">Selecione um cadastro:</label>
-    <select id="selectCadastro" onchange="carregarDados()">
-        <option value="">-- Selecione --</option>
-    </select>
-    <br><br>
+    <header>
+        <h1>Editar Cadastro de Viagem</h1>
+    </header>
 
-    <h2>Dados do Paciente</h2>
-    <label for="nomePaciente">Nome:</label>
-    <input type="text" id="nomePaciente" /><br/>
+    <form id="formEditar">
+        <!-- Campos para edição aqui (semelhantes aos da página de cadastro) -->
+        <div class="form-group">
+            <label for="nomePaciente">Nome do Paciente:</label>
+            <input type="text" id="nomePaciente" name="nomePaciente" required>
+        </div>
+        <!-- Outros campos... -->
+        
+        <div class="form-group">
+            <button type="submit" class="btn">Salvar Alterações</button>
+        </div>
+    </form>
 
-    <label for="telefone">Telefone:</label>
-    <input type="text" id="telefone" /><br/>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
 
-    <label for="dataAgendamento">Data de Agendamento:</label>
-    <input type="date" id="dataAgendamento" /><br/>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbx61nj9PZtGXgnqReiPo8TvrZcva67syY-R04oci0qzG-rAk1tEkogxI0ZN4RWGT9BE/exec'; // Substitua pelo seu URL
 
-    <label for="horario">Horário:</label>
-    <input type="time" id="horario" /><br/>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Buscar os dados do cadastro específico usando o ID
+            fetch(`${scriptURL}?id=${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Preencher o formulário com os dados recebidos
+                    document.getElementById('nomePaciente').value = data.nomePaciente;
+                    // Preencher os outros campos...
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar dados:', error);
+                    alert('Ocorreu um erro ao buscar os dados para edição.');
+                });
+        });
 
-    <label for="motorista">Motorista:</label>
-    <input type="text" id="motorista" /><br/>
+        document.getElementById('formEditar').addEventListener('submit', function(e) {
+            e.preventDefault();
 
-    <label for="especialidade">Especialidade:</label>
-    <input type="text" id="especialidade" /><br/>
+            const formData = new FormData(this);
+            formData.append('id', id); // Adiciona o ID ao FormData para identificação
 
-    <label for="tipoCarro">Tipo de Carro:</label>
-    <input type="text" id="tipoCarro" /><br/>
-
-    <label for="destino">Destino:</label>
-    <input type="text" id="destino" /><br/>
-
-    <label for="acompanhante">Acompanhante:</label>
-    <input type="text" id="acompanhante" /><br/>
-
-    <label for="retorno">Retorno:</label>
-    <input type="text" id="retorno" /><br/>
-
-    <label for="observacoes">Observações:</label>
-    <input type="text" id="observacoes" /><br/>
-
-    <br/>
-    <button onclick="atualizarCadastro()">Atualizar Cadastro</button>
-    <button onclick="excluirCadastro()">Excluir Cadastro</button>
-    <button onclick="voltarParaIndex()">Voltar para o Início</button>
+            fetch(scriptURL, { method: 'POST', body: formData })
+                .then(response => response.text())
+                .then(result => {
+                    alert(result); 
+                    window.location.href = 'visualizar_cadastros.html'; // Redireciona após salvar
+                })
+                .catch(error => {
+                    console.error('Erro ao atualizar dados:', error);
+                    alert('Ocorreu um erro ao salvar as alterações.');
+                });
+        });
+    </script>
 </body>
 </html>

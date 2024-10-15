@@ -7,8 +7,61 @@
     <link rel="stylesheet" href="styles1.css">
     <link rel="icon" href="icons8-ambulância-16.ico" type="image/x-icon">
     <style>
-        /* Estilos existentes ... */
-        /* (Mantenha seus estilos aqui) */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .input-filter {
+            margin: 5px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        .btn {
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -19,10 +72,12 @@
         <input type="text" id="filtroNome" placeholder="Filtrar por Nome" class="input-filter" onkeyup="filtrarPorNome()">
         <input type="text" id="filtroData" placeholder="Filtrar por Data (AAAA-MM-DD)" class="input-filter" onkeyup="filtrarPorData()">
         <input type="text" id="filtroDestino" placeholder="Filtrar por Destino" class="input-filter" onkeyup="filtrarPorDestino()">
+    </div>
+
+    <div class="button-container">
         <button class="btn" onclick="resetarFiltro()">Mostrar Todos</button>
         <button class="btn" onclick="imprimirTabela()">Imprimir</button>
         <button class="btn" id="voltar" onclick="voltarParaCadastro()">Voltar para Cadastro</button>
-        <button class="btn" onclick="salvarDados()">Salvar Dados</button> <!-- Novo botão -->
     </div>
 
     <table id="tabelaCadastros">
@@ -51,11 +106,15 @@
     </table>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbwiWxVBbBgc_hZ2-QSx9SZblQZljEGc10j1qFj8H3FMFfU49f9oEEvHzC4Nyhs3xDs/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzaFwcU3cnl2PTz__hTjcn6iKctCFiv-DqLq8PCrhNnUEmYBKXS9Ya7FNAVdjMK0KxZ/exec';
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Fetch initial data
             fetch(scriptURL)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
                 .then(data => {
                     const tbody = document.querySelector('#tabelaCadastros tbody');
                     tbody.innerHTML = '';
@@ -95,25 +154,24 @@
 
         function editarLinha(linha, index) {
             const cells = linha.querySelectorAll('td');
-            
+
             // Torna as células editáveis
             cells.forEach((cell, i) => {
                 if (i < cells.length - 1) { // Exceto a célula de Ações
                     cell.setAttribute('contenteditable', 'true');
                     cell.style.backgroundColor = '#f0f8ff'; // Destaca a célula durante a edição
+                    cell.focus(); // Foca na célula editável
                 }
             });
 
-            const btnSalvar = document.createElement('button');
-            btnSalvar.textContent = 'Salvar';
-            btnSalvar.classList.add('edit-btn');
-            btnSalvar.style.backgroundColor = '#4CAF50';
-            btnSalvar.addEventListener('click', () => salvarEdicao(linha, index));
-            linha.lastChild.appendChild(btnSalvar); // Adiciona o botão de salvar
+            // Escuta a perda de foco na célula para salvar os dados
+            cells.forEach(cell => {
+                cell.addEventListener('blur', () => salvarEdicao(linha, index));
+            });
         }
 
         function salvarEdicao(linha, index) {
-            const cells = linha.querySelectorAll('td');
+            const cells = linha.querySelectorAll('td'); // Seleciona todas as células da linha editada
             const dadosAtualizados = {
                 nomePaciente: cells[0].textContent,
                 cartaoSUS: cells[1].textContent,
@@ -129,29 +187,30 @@
                 acompanhante: cells[11].textContent,
                 retorno: cells[12].textContent,
                 observacoes: cells[13].textContent,
-                index: index // Envia o índice da linha
+                index: index // Envia o índice da linha para identificação
             };
 
             // Faz a requisição para atualizar os dados
             fetch(scriptURL, {
-                method: 'POST',
-                body: JSON.stringify(dadosAtualizados),
+                method: 'POST', // Método de requisição
+                body: JSON.stringify(dadosAtualizados), // Envia os dados atualizados como JSON
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json' // Define o tipo de conteúdo como JSON
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                // Verifica se a resposta da rede foi bem-sucedida
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.json(); // Converte a resposta para JSON
+            })
             .then(result => {
-                if (result.status === 'success') {
-                    alert('Dados atualizados com sucesso!');
-                    cells.forEach(cell => {
-                        cell.setAttribute('contenteditable', 'false'); // Desativa edição após salvar
-                        cell.style.backgroundColor = ''; // Remove o destaque
-                    });
-                    linha.lastChild.removeChild(linha.lastChild.lastChild); // Remove o botão de salvar
-                } else {
-                    alert('Erro ao atualizar os dados: ' + result.message);
-                }
+                // Exibe uma mensagem de sucesso com o resultado
+                alert('Dados atualizados com sucesso: ' + result.message); 
+                // Desativa a edição das células
+                cells.forEach(cell => {
+                    cell.setAttribute('contenteditable', 'false'); 
+                    cell.style.backgroundColor = ''; // Remove o destaque
+                });
             })
             .catch(error => {
                 console.error('Erro ao atualizar dados:', error);
@@ -159,80 +218,12 @@
             });
         }
 
-        function salvarDados() {
-            const tbody = document.querySelector('#tabelaCadastros tbody');
-            const dados = [];
-
-            tbody.querySelectorAll('tr').forEach(linha => {
-                const cells = linha.querySelectorAll('td');
-                const dadosLinha = {
-                    nomePaciente: cells[0].textContent,
-                    cartaoSUS: cells[1].textContent,
-                    cpf: cells[2].textContent,
-                    endereco: cells[3].textContent,
-                    telefone: cells[4].textContent,
-                    dataAgendamento: cells[5].textContent,
-                    horario: cells[6].textContent,
-                    motorista: cells[7].textContent,
-                    especialidade: cells[8].textContent,
-                    tipoCarro: cells[9].textContent,
-                    destino: cells[10].textContent,
-                    acompanhante: cells[11].textContent,
-                    retorno: cells[12].textContent,
-                    observacoes: cells[13].textContent,
-                };
-                dados.push(dadosLinha);
-            });
-
-            // Faz a requisição para salvar todos os dados na planilha
-            fetch(scriptURL, {
-                method: 'POST',
-                body: JSON.stringify({ dados }), // Envia todos os dados em um objeto
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (result.status === 'success') {
-                    alert('Dados salvos com sucesso!');
-                } else {
-                    alert('Erro ao salvar os dados: ' + result.message);
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao salvar dados:', error);
-                alert('Ocorreu um erro ao salvar os dados: ' + error.message);
-            });
-        }
-
-        function filtrarPorNome() {
-            const filtro = document.getElementById('filtroNome').value.toLowerCase();
-            const linhas = document.querySelectorAll('#tabelaCadastros tbody tr');
-
-            linhas.forEach(linha => {
-                const nomePaciente = linha.cells[0].textContent.toLowerCase();
-                linha.style.display = nomePaciente.includes(filtro) ? '' : 'none';
-            });
-        }
-
-        function filtrarPorData() {
-            const filtro = document.getElementById('filtroData').value.toLowerCase();
-            const linhas = document.querySelectorAll('#tabelaCadastros tbody tr');
-
-            linhas.forEach(linha => {
-                const dataAgendamento = linha.cells[5].textContent.toLowerCase();
-                linha.style.display = dataAgendamento.includes(filtro) ? '' : 'none';
-            });
-        }
-
         function filtrarPorDestino() {
-            const filtro = document.getElementById('filtroDestino').value.toLowerCase();
-            const linhas = document.querySelectorAll('#tabelaCadastros tbody tr');
-
-            linhas.forEach(linha => {
-                const destino = linha.cells[10].textContent.toLowerCase();
-                linha.style.display = destino.includes(filtro) ? '' : 'none';
+            const input = document.getElementById('filtroDestino').value.toLowerCase();
+            const rows = document.querySelectorAll('#tabelaCadastros tbody tr');
+            rows.forEach(row => {
+                const destino = row.cells[10].textContent.toLowerCase();
+                row.style.display = destino.includes(input) ? '' : 'none';
             });
         }
 
@@ -240,10 +231,9 @@
             document.getElementById('filtroNome').value = '';
             document.getElementById('filtroData').value = '';
             document.getElementById('filtroDestino').value = '';
-            const linhas = document.querySelectorAll('#tabelaCadastros tbody tr');
-            linhas.forEach(linha => {
-                linha.style.display = '';
-            });
+            filtrarPorNome();
+            filtrarPorData();
+            filtrarPorDestino();
         }
 
         function imprimirTabela() {
@@ -251,7 +241,7 @@
         }
 
         function voltarParaCadastro() {
-            window.location.href = 'cadastro.html'; // Altere para o caminho correto do seu arquivo de cadastro
+            window.location.href = 'cadastro.html'; // Altere para a URL do seu formulário de cadastro
         }
     </script>
 </body>
