@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marcação de Viagem</title>
+    <link rel="icon" href="icons8-ambulância-16.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-image: url('plano-de-saude-preco.png'); /* Insira o link da imagem aqui */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Fixa a imagem durante o scroll */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9); /* Transparência na caixa para ver a imagem ao fundo */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 900px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            font-size: 16px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: border 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .observacoes {
+            height: 150px;
+            resize: none;
+            padding: 10px;
+            width: 100%;
+        }
+
+        .btn {
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+                margin: 0 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Marcação de Viagem</h1>
+
+    <form id="formMarcarViagem">
+        <div class="form-group">
+            <label for="passageiros">Passageiros:</label>
+            <input type="text" id="passageiros" name="passageiros" required>
+        </div>
+
+        <div class="form-group">
+            <label for="observacoes">Observações:</label>
+            <textarea id="observacoes" name="observacoes" class="observacoes" placeholder="Observações adicionais..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="endereco">Endereço:</label>
+            <input type="text" id="endereco" name="endereco" required>
+        </div>
+
+        <div class="form-group">
+            <label for="contato">Contato:</label>
+            <input type="text" id="contato" name="contato" required>
+        </div>
+
+        <div class="form-group">
+            <label for="destino">Destino:</label>
+            <input type="text" id="destino" name="destino" required>
+        </div>
+
+        <div class="form-group">
+            <label for="motorista">Nome do Motorista:</label>
+            <input type="text" id="motorista" name="motorista" required>
+        </div>
+
+        <div class="form-group">
+            <label for="rota">Rota:</label>
+            <select id="rota" name="rota" required>
+                <option value="Rota 1">Rota 1</option>
+                <option value="Rota 2">Rota 2</option>
+                <option value="Rota 3">Rota 3</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="dataViagem">Data da Viagem:</label>
+            <input type="date" id="dataViagem" name="dataViagem" required>
+        </div>
+
+        <div class="form-group">
+            <label for="tipoTransporte">Tipo de Transporte:</label>
+            <select id="tipoTransporte" name="tipoTransporte" required>
+                <option value="Ambulância">Ambulância</option>
+                <option value="Van">Van</option>
+                <option value="Carro Pequeno">Carro Pequeno</option>
+                <option value="TOPIQUE1">Topique 1</option>
+                <option value="TOPIQUE2">Topique 2</option>
+                <option value="MICROONIBUS">MicroOnibus</option>
+
+            </select>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn">Confirmar Marcação</button><br><br>
+            <a href="index.html" class="btn">Voltar para Cadastro</a>
+        </div>
+
+        <div class="form-group">
+            <a href="https://docs.google.com/spreadsheets/d/1MZfldCAX3AJiKNTe4t9VmkpKzfZT0JwqVpL1MZmsx6k/edit" target="_blank" class="btn btn-secondary">Abrir Planilha de Marcação</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('formMarcarViagem').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxkLwOttvvgt9C2TPt4wMIOpllx1mt0xQsj30r_c5FVi9OQ1qXsYQzUts8205tDFJN2_Q/exec';
+
+        fetch(scriptURL, { method: 'POST', body: formData })
+            .then(response => response.text())
+            .then(result => {
+                alert('Viagem marcada com sucesso!');
+                document.getElementById('formMarcarViagem').reset();
+            })
+            .catch(error => {
+                console.error('Erro ao marcar viagem:', error);
+                alert('Erro ao marcar viagem.');
+            });
+    });
+</script>
+
+</body>
+</html>

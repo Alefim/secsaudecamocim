@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizar Cadastros Salvos</title>
-    <link rel="stylesheet" href="styles1.css">
+    <title>Visualizar Cadastros e Marcar Viagem</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="icons8-ambulância-16.ico" type="image/x-icon">
     <style>
         body {
@@ -13,7 +13,7 @@
             background-color: #f5f5f5;
         }
 
-        h1 {
+        h1, h2 {
             text-align: center;
         }
 
@@ -62,6 +62,33 @@
             background-color: #007bff;
             color: white;
         }
+
+        form {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        form input, form button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+        }
+
+        form input {
+            border: 1px solid #ccc;
+            width: 250px;
+        }
+
+        form button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
@@ -77,27 +104,18 @@
     <div class="button-container">
         <button class="btn" onclick="resetarFiltro()">Mostrar Todos</button>
         <button class="btn" onclick="imprimirTabela()">Imprimir</button>
-        <button class="btn" id="voltar" onclick="voltarParaCadastro()">Voltar para Cadastro</button>
     </div>
 
     <table id="tabelaCadastros">
         <thead>
             <tr>
                 <th>Nome do Paciente</th>
-                <th>CNS (Cartão SUS)</th>
-                <th>CPF</th>
-                <th>Endereço</th>
                 <th>Telefone</th>
+                <th>Destino</th>
                 <th>Data de Agendamento</th>
                 <th>Horário</th>
-                <th>Motorista</th>
-                <th>Especialidade</th>
                 <th>Tipo de Carro</th>
-                <th>Destino</th>
-                <th>Acompanhante</th>
-                <th>Retorno</th>
-                <th>Observações</th>
-                <th>Ações</th>
+                <th>Motorista</th>
             </tr>
         </thead>
         <tbody>
@@ -105,144 +123,112 @@
         </tbody>
     </table>
 
-    <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzaFwcU3cnl2PTz__hTjcn6iKctCFiv-DqLq8PCrhNnUEmYBKXS9Ya7FNAVdjMK0KxZ/exec';
+    <h2>Marcar Viagem</h2>
 
+    <form id="formViagem">
+        <input type="text" id="nomePaciente" placeholder="Nome do Paciente" required>
+        <input type="text" id="telefone" placeholder="Telefone" required>
+        <input type="text" id="destino" placeholder="Destino" required>
+        <input type="date" id="dataViagem" required>
+        <input type="time" id="horarioSaida" placeholder="Horário de Saída" required>
+        <input type="time" id="horarioRetorno" placeholder="Horário de Retorno" required>
+        <input type="text" id="tipoCarro" placeholder="Tipo de Carro" required>
+        <input type="text" id="motorista" placeholder="Motorista" required>
+        <button type="submit">Marcar Viagem</button>
+    </form>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbx-v_Y_7FG3-wj8zBZsKCSrHhLJZwbMR6IYVqW8V_ri5zW30Lsovup_QVDKXt5m2cwT/exec';
+
+        // Carregar dados ao iniciar a página
         document.addEventListener('DOMContentLoaded', () => {
-            // Fetch initial data
             fetch(scriptURL)
-                .then(response => {
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
                     const tbody = document.querySelector('#tabelaCadastros tbody');
-                    tbody.innerHTML = '';
-
-                    data.forEach((row, index) => {
+                    data.forEach(row => {
                         const tr = document.createElement('tr');
-                        const colunas = [
-                            'nomePaciente', 'cartaoSUS', 'cpf', 'endereco',
-                            'telefone', 'dataAgendamento', 'horario', 'motorista',
-                            'especialidade', 'tipoCarro', 'destino', 'acompanhante',
-                            'retorno', 'observacoes'
-                        ];
-
-                        colunas.forEach(coluna => {
-                            const td = document.createElement('td');
-                            td.textContent = row[coluna] || '';
-                            td.setAttribute('contenteditable', 'false'); // Desativa edição por padrão
-                            tr.appendChild(td);
-                        });
-
-                        const tdAcoes = document.createElement('td');
-                        const btnEditar = document.createElement('button');
-                        btnEditar.textContent = 'Editar';
-                        btnEditar.classList.add('edit-btn');
-                        btnEditar.addEventListener('click', () => editarLinha(tr, index));
-                        tdAcoes.appendChild(btnEditar);
-                        tr.appendChild(tdAcoes);
-
+                        tr.innerHTML = `
+                            <td>${row.nomePaciente}</td>
+                            <td>${row.telefone}</td>
+                            <td>${row.destino}</td>
+                            <td>${row.dataAgendamento}</td>
+                            <td>${row.horario}</td>
+                            <td>${row.tipoCarro}</td>
+                            <td>${row.motorista}</td>
+                        `;
                         tbody.appendChild(tr);
                     });
                 })
                 .catch(error => {
-                    console.error('Erro ao buscar dados:', error);
-                    alert('Ocorreu um erro ao buscar os dados.');
+                    alert('Erro ao buscar dados: ' + error.message);
                 });
         });
 
-        function editarLinha(linha, index) {
-            const cells = linha.querySelectorAll('td');
-
-            // Torna as células editáveis
-            cells.forEach((cell, i) => {
-                if (i < cells.length - 1) { // Exceto a célula de Ações
-                    cell.setAttribute('contenteditable', 'true');
-                    cell.style.backgroundColor = '#f0f8ff'; // Destaca a célula durante a edição
-                    cell.focus(); // Foca na célula editável
-                }
-            });
-
-            // Escuta a perda de foco na célula para salvar os dados
-            cells.forEach(cell => {
-                cell.addEventListener('blur', () => salvarEdicao(linha, index));
+        // Função para filtrar por Nome
+        function filtrarPorNome() {
+            const input = document.getElementById('filtroNome').value.toLowerCase();
+            const rows = document.querySelectorAll('#tabelaCadastros tbody tr');
+            rows.forEach(row => {
+                const nome = row.cells[0].textContent.toLowerCase();
+                row.style.display = nome.includes(input) ? '' : 'none';
             });
         }
 
-        function salvarEdicao(linha, index) {
-            const cells = linha.querySelectorAll('td'); // Seleciona todas as células da linha editada
-            const dadosAtualizados = {
-                nomePaciente: cells[0].textContent,
-                cartaoSUS: cells[1].textContent,
-                cpf: cells[2].textContent,
-                endereco: cells[3].textContent,
-                telefone: cells[4].textContent,
-                dataAgendamento: cells[5].textContent,
-                horario: cells[6].textContent,
-                motorista: cells[7].textContent,
-                especialidade: cells[8].textContent,
-                tipoCarro: cells[9].textContent,
-                destino: cells[10].textContent,
-                acompanhante: cells[11].textContent,
-                retorno: cells[12].textContent,
-                observacoes: cells[13].textContent,
-                index: index // Envia o índice da linha para identificação
-            };
-
-            // Faz a requisição para atualizar os dados
-            fetch(scriptURL, {
-                method: 'POST', // Método de requisição
-                body: JSON.stringify(dadosAtualizados), // Envia os dados atualizados como JSON
-                headers: {
-                    'Content-Type': 'application/json' // Define o tipo de conteúdo como JSON
-                }
-            })
-            .then(response => {
-                // Verifica se a resposta da rede foi bem-sucedida
-                if (!response.ok) throw new Error('Network response was not ok');
-                return response.json(); // Converte a resposta para JSON
-            })
-            .then(result => {
-                // Exibe uma mensagem de sucesso com o resultado
-                alert('Dados atualizados com sucesso: ' + result.message); 
-                // Desativa a edição das células
-                cells.forEach(cell => {
-                    cell.setAttribute('contenteditable', 'false'); 
-                    cell.style.backgroundColor = ''; // Remove o destaque
-                });
-            })
-            .catch(error => {
-                console.error('Erro ao atualizar dados:', error);
-                alert('Ocorreu um erro ao salvar as alterações: ' + error.message);
-            });
-        }
-
+        // Função para filtrar por Destino
         function filtrarPorDestino() {
             const input = document.getElementById('filtroDestino').value.toLowerCase();
             const rows = document.querySelectorAll('#tabelaCadastros tbody tr');
             rows.forEach(row => {
-                const destino = row.cells[10].textContent.toLowerCase();
+                const destino = row.cells[2].textContent.toLowerCase();
                 row.style.display = destino.includes(input) ? '' : 'none';
             });
         }
 
+        // Função para resetar filtros
         function resetarFiltro() {
             document.getElementById('filtroNome').value = '';
-            document.getElementById('filtroData').value = '';
             document.getElementById('filtroDestino').value = '';
             filtrarPorNome();
-            filtrarPorData();
             filtrarPorDestino();
         }
 
+        // Função para imprimir a tabela
         function imprimirTabela() {
             window.print();
         }
 
-        function voltarParaCadastro() {
-            window.location.href = 'cadastro.html'; // Altere para a URL do seu formulário de cadastro
-        }
+        // Função para enviar o formulário de marcação de viagem
+        document.getElementById('formViagem').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const dadosViagem = {
+                nomePaciente: document.getElementById('nomePaciente').value,
+                telefone: document.getElementById('telefone').value,
+                destino: document.getElementById('destino').value,
+                dataViagem: document.getElementById('dataViagem').value,
+                horarioSaida: document.getElementById('horarioSaida').value,
+                horarioRetorno: document.getElementById('horarioRetorno').value,
+                tipoCarro: document.getElementById('tipoCarro').value,
+                motorista: document.getElementById('motorista').value
+            };
+
+            fetch(scriptURL, {
+                method: 'POST',
+                body: JSON.stringify(dadosViagem),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                document.getElementById('formViagem').reset();
+            })
+            .catch(error => {
+                alert('Erro ao registrar viagem: ' + error.message);
+            });
+        });
     </script>
 </body>
 </html>

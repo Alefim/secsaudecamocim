@@ -7,6 +7,18 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="icons8-ambulância-16.ico" type="image/x-icon">
     <style>
+
+body {
+            background-image: url('plano-de-saude-preco.png'); /* Insira o link da imagem aqui */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Fixa a imagem durante o scroll */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
         .header {
             display: flex;
             justify-content: flex-end; /* Alinha o botão à direita */
@@ -31,7 +43,7 @@
     </header>
 
     <div class="container">
-        <h1>Cadastro de Viagem <br>de Paciente SMS</h1>
+        <h1>Cadastro de <br>de Paciente SMS</h1>
         
         <form id="formCadastro">
             <div class="form-group">
@@ -108,19 +120,23 @@
             </div>
 
             <div class="form-group">
-                <button type="submit" class="btn small">Cadastrar Viagem</button>
+                <button type="submit" class="btn small">Cadastrar Paciente</button>
             </div>
         </form>
+
+     
 
         <div class="additional-buttons">
             <a href="visualizar_cadastros.html" class="btn">Visualizar Cadastros Salvos</a>
             <a href="gerar_comprovante.html" class="btn">Gerar Comprovante de Viagem</a>
             <a href="editar_cadastro.html" class="btn">Editar Cadastro Salvo</a>
-            <a href="agendamento.html" class="btn">Agendamento</a>
+            <a href="marcar_viagem.html" class="btn">Marcação da Viagem</a>
+            </a>
         </div>
     </div>
 
     <script>
+        // Função para cadastrar a viagem
         document.getElementById('formCadastro').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -137,6 +153,23 @@
                 .catch(error => {
                     console.error('Erro ao enviar dados:', error);
                     alert('Ocorreu um erro ao salvar os dados.');
+                });
+        });
+
+        // Função para marcar a viagem usando os dados já preenchidos
+        document.getElementById('btnMarcarViagem').addEventListener('click', function() {
+            const formData = new FormData(document.getElementById('formCadastro'));
+
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxPbHgsVyr3xqz1KUI_ZTH8CxH-PMO21QncbTS54WVK8qjUgmf2_qwWkXsr_2NVfRll/exec';
+
+            fetch(scriptURL, { method: 'POST', body: formData })
+                .then(response => response.text())
+                .then(result => {
+                    alert('Viagem marcada com sucesso!');
+                })
+                .catch(error => {
+                    console.error('Erro ao marcar viagem:', error);
+                    alert('Erro ao marcar viagem.');
                 });
         });
     </script>
