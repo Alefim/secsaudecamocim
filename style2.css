@@ -9,12 +9,16 @@ body {
     padding: 0; /* Remove o padding padrão */
     height: 100vh; /* Define a altura do body para 100% da altura da viewport */
     overflow: hidden; /* Bloqueia a barra de rolagem */
+    display: flex; /* Permite o uso de flexbox */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
 }
 
 .login-container {
-    max-width: 400px;
-    margin: 100px auto;
-    padding: 20px;
+    max-width: 300px; /* Diminuindo a largura máxima */
+    width: 90%; /* Largura responsiva */
+    margin: 20px; /* Adiciona margem nas laterais */
+    padding: 15px; /* Diminuindo o padding interno */
     background-color: rgba(255, 255, 255, 0.8); /* Fundo branco com transparência */
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
@@ -37,8 +41,8 @@ label {
 }
 
 input[type="text"], input[type="password"] {
-    width: 90%;
-    padding: 10px;
+    width: 90%; /* Ocupa toda a largura do container */
+    padding: 8px; /* Diminuindo o padding dos inputs */
     border: 1px solid #ccc;
     border-radius: 5px;
     padding-left: 30px; /* Espaço para o ícone */
@@ -51,7 +55,7 @@ input[type="password"]::placeholder {
 
 .fa-user, .fa-lock {
     position: absolute;
-    left: 10px; /* Distância do ícone do lado esquerdo */
+    left: 30px; /* Distância do ícone do lado esquerdo */
     top: 50%; /* Centraliza verticalmente */
     transform: translateY(-50%); /* Ajusta a posição vertical */
     color: #888; /* Cor dos ícones */

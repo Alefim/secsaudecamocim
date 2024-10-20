@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->
     <link rel="icon" href="icons8-ambulância-16.ico" type="image/x-icon"> <!-- Favicon -->
     <style>
-        /* Estilos gerais */
+        /* Ajustes para a página */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -16,121 +16,39 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            background-color: #f0f2f5;
         }
-
         .logo-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin: 20px;
             padding: 10px 20px;
-            width: 100%;
         }
-
         .logo-container img {
-            max-width: 150px;
-            height: auto;
+            max-height: 70px; /* Altura máxima para as logos */
+            height: auto; /* Mantém a proporção */
+            flex: 1; /* Faz com que as logos ocupem espaço igual */
         }
-
         .login-container {
             text-align: center;
-            padding: 40px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            margin: auto;
-            flex-grow: 1; /* Permite que o container de login cresça */
+            margin-top: 100px;
+            flex-grow: 1;
         }
-
         .login-container h1 {
             margin-bottom: 20px;
         }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
-
-        .btn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 16px;
-        }
-
-        .btn:hover {
-            background-color: #0056b3;
-        }
-
-        .error-message {
-            color: red;
-            margin-top: 10px;
-        }
-
         footer {
             background-color: #f1f1f1;
             text-align: center;
             padding: 10px;
+            position: relative;
+            bottom: 0;
             width: 100%;
         }
-
         footer p {
             margin: 0;
             padding: 5px;
             color: #555;
-        }
-
-        /* Estilos para dispositivos móveis */
-        @media (max-width: 768px) {
-            .logo-container {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .login-container {
-                width: 90%;
-                padding: 20px;
-            }
-
-            .form-group input, .btn {
-                font-size: 14px;
-                padding: 8px;
-            }
-        }
-
-        /* Estilos para computadores e telas maiores */
-        @media (min-width: 769px) {
-            .logo-container {
-                justify-content: space-between;
-            }
-
-            .login-container {
-                max-width: 400px;
-            }
-
-            .form-group input, .btn {
-                font-size: 16px;
-            }
         }
     </style>
 </head>
