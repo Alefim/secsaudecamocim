@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerar Comprovante de Viagem</title>
+    <link rel="icon" href="icons8-ambulância-16.ico" type="image/x-icon">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -110,11 +111,12 @@
     </div>
 
     <div class="input-group">
-        <label for="telefone">Telefone</label>
+        <label for="telefone">Telefone/Sec.Saúde</label>
         <input type="text" id="telefone" placeholder="Digite o telefone">
     </div>
 
     <button class="btn" onclick="gerarComprovante()">Gerar Comprovante</button>
+    <button class="btn" onclick="irParaCadastro()">Voltar</button> <!-- Botão para redirecionar ao cadastro -->
 </div>
 
 <div id="comprovanteContainer" class="comprovante">
@@ -182,6 +184,11 @@
         // Voltar para a tela de cadastro
         document.getElementById('comprovanteContainer').style.display = 'none';
         document.getElementById('cadastroForm').style.display = 'block';
+    }
+
+    function irParaCadastro() {
+        // Redirecionar para a página de cadastro
+        window.location.href = 'index.html'; // Atualize com o nome correto da página de cadastro
     }
 </script>
 
