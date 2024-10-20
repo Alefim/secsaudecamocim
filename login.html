@@ -19,7 +19,7 @@
         }
         .logo-container {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-between; /* Coloca as logos nas extremidades */
             align-items: center;
             margin: 20px;
             padding: 10px 20px;
@@ -27,15 +27,41 @@
         .logo-container img {
             max-height: 70px; /* Altura máxima para as logos */
             height: auto; /* Mantém a proporção */
-            flex: 1; /* Faz com que as logos ocupem espaço igual */
         }
         .login-container {
             text-align: center;
             margin-top: 100px;
             flex-grow: 1;
+            padding: 0 20px; /* Adicionando um pouco de padding nas laterais */
         }
         .login-container h1 {
             margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%; /* Faz com que os inputs ocupem 100% da largura do container */
+            padding: 10px;
+            box-sizing: border-box; /* Inclui padding e bordas na largura total */
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #4CAF50; /* Cor de fundo do botão */
+            color: white; /* Cor do texto do botão */
+            border: none; /* Remove bordas */
+            cursor: pointer; /* Cursor de mão ao passar sobre o botão */
+        }
+        .btn:hover {
+            background-color: #45a049; /* Cor de fundo do botão ao passar o mouse */
+        }
+        #error-message {
+            color: red;
+            margin-top: 10px;
         }
         footer {
             background-color: #f1f1f1;
@@ -50,13 +76,26 @@
             padding: 5px;
             color: #555;
         }
+
+        /* Media Queries para responsividade */
+        @media (max-width: 600px) {
+            .logo-container {
+                flex-direction: column; /* Coloca as logos em coluna em telas menores */
+                align-items: center; /* Centraliza as logos */
+            }
+            .logo-container img {
+                margin-bottom: 10px; /* Espaçamento entre as logos */
+            }
+            .login-container {
+                margin-top: 50px; /* Ajusta o espaço em telas menores */
+            }
+        }
     </style>
 </head>
 <body>
     <div class="logo-container">
-        <!-- Substitua os caminhos das imagens pelas logos corretas -->
-        <img src="mama.png" alt="Logo da Prefeitura">
-        <img src="WhatsApp Image 2023-11-23 at 11.06 (1).png" alt="Logo da Secretaria de Saúde">
+        <img src="mama.png" alt="Logo da Prefeitura" style="margin-right: 100%;">
+        <img src="WhatsApp Image 2023-11-23 at 11.06 (1).png" alt="Logo da Secretaria de Saúde" style="margin-left: 50%;">
     </div>
 
     <div class="login-container">
