@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->
     <link rel="icon" href="icons8-ambulância-16.ico" type="image/x-icon"> <!-- Favicon -->
     <style>
-        /* Ajustes para a página */
+        /* Ajustes gerais da página */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -34,7 +34,7 @@
             text-align: center;
             margin-top: 100px;
             flex-grow: 1;
-            padding: 0 20px; /* Adicionando um pouco de padding nas laterais */
+            padding: 0 20px;
         }
 
         .login-container h1 {
@@ -51,21 +51,22 @@
         }
 
         .form-group input {
-            width: 100%; /* Faz com que os inputs ocupem 100% da largura do container */
+            width: 100%;
             padding: 10px;
-            box-sizing: border-box; /* Inclui padding e bordas na largura total */
+            box-sizing: border-box;
         }
 
         .btn {
             padding: 10px 20px;
-            background-color: #4CAF50; /* Cor de fundo do botão */
-            color: white; /* Cor do texto do botão */
-            border: none; /* Remove bordas */
-            cursor: pointer; /* Cursor de mão ao passar sobre o botão */
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%; /* Deixa o botão ocupando toda a largura no mobile */
         }
 
         .btn:hover {
-            background-color: #45a049; /* Cor de fundo do botão ao passar o mouse */
+            background-color: #45a049;
         }
 
         #error-message {
@@ -88,19 +89,38 @@
             color: #555;
         }
 
-        /* Media Queries para responsividade */
+        /* Media Queries para responsividade em celulares */
         @media (max-width: 600px) {
             .logo-container {
                 flex-direction: column; /* Coloca as logos em coluna em telas menores */
-                align-items: center; /* Centraliza as logos */
+                align-items: center;
+                padding: 10px;
             }
 
             .logo-container img {
+                max-height: 60px; /* Reduz o tamanho das logos em telas menores */
                 margin-bottom: 10px; /* Espaçamento entre as logos */
             }
 
             .login-container {
                 margin-top: 50px; /* Ajusta o espaço em telas menores */
+                padding: 0 10px;
+            }
+
+            .form-group input {
+                padding: 12px;
+            }
+
+            .btn {
+                padding: 15px; /* Aumenta o tamanho do botão para facilitar o toque em telas menores */
+            }
+
+            footer {
+                padding: 15px;
+            }
+
+            footer p {
+                font-size: 14px; /* Reduz o tamanho da fonte no rodapé para caber melhor */
             }
         }
     </style>
