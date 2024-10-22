@@ -7,6 +7,18 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="icons8-ambulância-16.ico" type="image/x-icon">
     <style>
+        /* Estilos do plano de fundo */
+        body {
+            background-image: url('sua-imagem-de-fundo.jpg'); /* Substitua pelo caminho da sua imagem */
+            background-size: cover; /* A imagem cobre toda a tela */
+            background-position: center; /* A imagem é centralizada */
+            background-repeat: no-repeat; /* Evita que a imagem se repita */
+            height: 100vh; /* Garante que a altura seja de 100% da tela */
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
         .header {
             display: flex;
             justify-content: flex-end;
@@ -22,6 +34,52 @@
         }
         .btn:hover {
             background-color: #0056b3;
+        }
+
+        /* Splash screen styles */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 5px solid #007bff;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #007bff;
+            text-align: center;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.8); /* Fundo branco com um pouco de transparência */
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: auto;
+            margin-top: 50px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
@@ -42,11 +100,6 @@
             <div class="form-group">
                 <label for="cartaoSus">Cartão do SUS:</label>
                 <input type="text" id="cartaoSus" name="cartaoSus">
-            </div>
-
-            <div class="form-group">
-                <label for="cpf">CPF:</label>
-                <input type="text" id="cpf" name="cpf" pattern="\d{11}" title="Digite 11 números, sem pontos ou traços.">
             </div>
 
             <div class="form-group">
@@ -120,9 +173,20 @@
         </div>
     </div>
 
+    <!-- Splash screen HTML -->
+    <div class="splash-screen" id="splashScreen">
+        <div>
+            <div class="loader"></div>
+            <div class="loading-text">Salvando...</div>
+        </div>
+    </div>
+
     <script>
         document.getElementById('formCadastro').addEventListener('submit', function(e) {
             e.preventDefault();
+
+            // Mostra a splash screen
+            document.getElementById('splashScreen').style.display = 'flex';
 
             const formData = new FormData(this);
             const scriptURL = 'https://script.google.com/macros/s/AKfycbxPbHgsVyr3xqz1KUI_ZTH8CxH-PMO21QncbTS54WVK8qjUgmf2_qwWkXsr_2NVfRll/exec';
@@ -136,6 +200,12 @@
                 .catch(error => {
                     console.error('Erro ao enviar dados:', error);
                     alert('Ocorreu um erro ao salvar os dados.');
+                })
+                .finally(() => {
+                    // Mantém a splash screen por 3 segundos antes de escondê-la
+                    setTimeout(() => {
+                        document.getElementById('splashScreen').style.display = 'none';
+                    }, 3000); // 3 segundos
                 });
         });
 
