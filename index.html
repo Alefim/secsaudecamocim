@@ -44,16 +44,31 @@
         }
 
         .btn {
-            padding: 10px 15px;
-            background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 4px;
-            margin: 5px; /* Margem uniforme entre os botões */
-            flex: 1; /* Faz os botões ocuparem espaço igual */
-            text-align: center; /* Centraliza o texto dentro do botão */
-            transition: background-color 0.3s; /* Transição suave para a mudança de cor */
-        }
+    padding: 10px 15px; /* Tamanho dos botões */
+    background-color: #007bff; /* Cor de fundo dos botões */
+    color: #fff; /* Cor do texto dos botões */
+    text-decoration: none; /* Sem sublinhado */
+    border-radius: 4px; /* Bordas arredondadas */
+    margin: 5px; /* Margem uniforme entre os botões */
+    transition: background-color 0.3s; /* Transição suave para a mudança de cor */
+}
+
+/* Estilos para o botão Sair */
+.btn-sair {
+    padding: 5px 10px; /* Ajustando o padding do botão Sair */
+    font-size: 14px; /* Ajustando o tamanho da fonte */
+}
+
+.btn-sair:hover {
+    background-color: #0056b3; /* Cor ao passar o mouse */
+}
+
+/* Estilos para o botão Ajuda */
+.btn:hover {
+    background-color: #0056b3; /* Cor ao passar o mouse */
+}
+
+
 
         .btn:hover {
             background-color: #0056b3;
@@ -130,6 +145,7 @@
 <body>
     <header class="header">
         <a href="login.html" class="btn btn-sair">Sair</a>
+        <a href="https://drive.google.com/drive/folders/1uGg_YDXsci_6sTyVrn1IEnQARpJ7wMAA" class="btn btn-ajuda" target="_blank">Ajuda</a>
     </header>
 
     <div class="container">
@@ -201,12 +217,10 @@
 
             <div class="form-group">
                 <label for="observacoes">Observações:</label>
-                <textarea id="observacoes" name="observacoes" rows="4" cols="50" placeholder="Escreva qualquer observação relevante aqui..."></textarea>
+                <textarea id="observacoes" name="observacoes" rows="4" cols="50"></textarea>
             </div>
 
-            <div class="form-group">
-                <button type="submit" class="btn small">Cadastrar Paciente</button>
-            </div>
+            <button type="submit" class="btn">Cadastrar</button>
         </form>
 
         <!-- Botões organizados abaixo do formulário -->
@@ -220,28 +234,27 @@
                 <a href="marcar_viagem.html" class="btn">Marcação da Viagem</a>
                 <a href="gerar_comprovante.html" class="btn">Gerar Comprovante de Viagem</a>
             </div>
+
+            <!-- Adicionando o botão de Ajuda -->
+            <div class="button-group">
+                <a href="documentacao.html" class="btn">Ajuda</a> <!-- Substitua "documentacao.html" pelo caminho correto da sua página de documentação -->
+            </div>
         </div>
     </div>
 
-    <!-- Splash screen HTML -->
     <div class="splash-screen" id="splashScreen">
-        <div>
-            <div class="loader"></div>
-            <div class="loading-text">Salvando...</div>
-        </div>
+        <div class="loader"></div>
+        <div class="loading-text">Carregando...</div>
     </div>
 
     <script>
         document.getElementById('formCadastro').onsubmit = function() {
-            document.getElementById('splashScreen').style.display = 'flex'; // Exibe a splash screen ao submeter o formulário
-            // Aqui você pode incluir a lógica para salvar os dados do formulário
-            // Depois de salvar, você pode esconder a splash screen
-            setTimeout(() => {
-                document.getElementById('splashScreen').style.display = 'none'; // Esconde a splash screen
-                alert("Cadastro realizado com sucesso!"); // Alerta de sucesso
-                document.getElementById('formCadastro').reset(); // Reseta o formulário
-            }, 2000); // Simulação de um tempo para salvar os dados
-            return false; // Impede o envio do formulário padrão
+            document.getElementById('splashScreen').style.display = 'flex';
+            setTimeout(function() {
+                alert('Cadastro realizado com sucesso!');
+                document.getElementById('splashScreen').style.display = 'none';
+            }, 2000); // Simula um tempo de carregamento
+            return false; // Impede o envio real do formulário
         };
     </script>
 </body>
