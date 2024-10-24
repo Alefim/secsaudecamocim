@@ -104,6 +104,7 @@
     <div class="button-container">
         <button class="btn" onclick="resetarFiltro()">Mostrar Todos</button>
         <button class="btn" onclick="imprimirTabela()">Imprimir</button>
+        <button class="btn" onclick="voltarParaCadastro()">Voltar para Cadastro</button> <!-- Botão para voltar -->
     </div>
 
     <table id="tabelaCadastros">
@@ -229,6 +230,11 @@
                 alert('Erro ao registrar viagem: ' + error.message);
             });
         });
+
+        // Função para voltar para a tela de cadastro
+        function voltarParaCadastro() {
+            window.location.href = 'index.html'; // Altere para o nome correto do arquivo de cadastro
+        }
     </script>
 </body>
 </html>

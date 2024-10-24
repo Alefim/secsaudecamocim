@@ -1,13 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SISTEMA DE CADASTRO E CONTROLE DE TRANSPORTE DE PACIENTE</title>
-    <link rel="stylesheet" href="style2.css"> <!-- Link para o CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->
-    <link rel="icon" href="icons8-ambulância-16.ico" type="image/x-icon"> <!-- Favicon -->
+    <title>ACI - SAÚDE</title>
+
+    <!-- Link para o CSS e Font Awesome -->
+    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="icons8-ambulância-16.ico" type="image/x-icon">
+
     <style>
+        body {
+            background-image: url('plano-de-saude-preco.png'); /* Substitua pelo caminho da sua imagem */
+            background-size: cover; /* A imagem cobre toda a tela */
+            background-position: center; /* A imagem é centralizada */
+            background-repeat: no-repeat; /* Evita que a imagem se repita */
+            height: 100vh; /* Garante que a altura seja de 100% da tela */
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
         /* Ajustes gerais da página */
         body {
             font-family: Arial, sans-serif;
@@ -16,53 +30,74 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            background-color: #f9f9f9; /* Fundo da página */
         }
 
+        /* Estilo para as logos sem fundo */
         .logo-container {
             display: flex;
-            justify-content: space-between; /* Coloca as logos nas extremidades */
+            justify-content: space-between;
             align-items: center;
-            padding: 20px;
+            padding: 20px 40px;
         }
 
         .logo-container img {
-            max-height: 70px; /* Altura máxima para as logos */
-            height: auto; /* Mantém a proporção */
+            max-height: 80px;
+            height: auto;
+            background-color: transparent; /* Garante que o fundo da logo seja transparente */
         }
 
+        /* Container de login */
         .login-container {
             text-align: center;
-            margin-top: 100px;
-            flex-grow: 1;
-            padding: 0 20px;
+            margin: 50px auto;
+            width: 100%;
+            max-width: 400px;
+            padding: 40px 20px;
         }
 
         .login-container h1 {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        /* Nova div para mensagem ou informação adicional */
+        .login-info {
+            margin-bottom: 20px; /* Espaçamento inferior */
+            font-size: 14px; /* Tamanho da fonte */
+            color: #666; /* Cor da fonte */
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            text-align: left;
         }
 
         .form-group label {
             display: block;
             margin-bottom: 5px;
+            font-weight: bold;
         }
 
         .form-group input {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
             box-sizing: border-box;
         }
 
         .btn {
-            padding: 10px 20px;
+            padding: 12px 20px;
             background-color: #4CAF50;
             color: white;
             border: none;
             cursor: pointer;
-            width: 100%; /* Deixa o botão ocupando toda a largura no mobile */
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
         }
 
         .btn:hover {
@@ -74,65 +109,63 @@
             margin-top: 10px;
         }
 
+        /* Rodapé ajustado */
         footer {
-            background-color: #f1f1f1;
             text-align: center;
             padding: 10px;
-            position: relative;
-            bottom: 0;
-            width: 100%;
+            font-size: 14px;
+            color: #555;
+            margin-top: auto; /* Mantém o rodapé no fim da página */
         }
 
         footer p {
             margin: 0;
-            padding: 5px;
-            color: #555;
         }
 
-        /* Media Queries para responsividade em celulares */
+        /* Media Queries para responsividade */
         @media (max-width: 600px) {
             .logo-container {
-                flex-direction: column; /* Coloca as logos em coluna em telas menores */
+                flex-direction: column;
                 align-items: center;
-                padding: 10px;
+                padding: 20px;
             }
 
             .logo-container img {
-                max-height: 60px; /* Reduz o tamanho das logos em telas menores */
-                margin-bottom: 10px; /* Espaçamento entre as logos */
+                max-height: 60px;
+                margin-bottom: 10px;
             }
 
             .login-container {
-                margin-top: 50px; /* Ajusta o espaço em telas menores */
-                padding: 0 10px;
-            }
-
-            .form-group input {
-                padding: 12px;
+                margin-top: 30px;
+                padding: 20px 10px;
             }
 
             .btn {
-                padding: 15px; /* Aumenta o tamanho do botão para facilitar o toque em telas menores */
-            }
-
-            footer {
                 padding: 15px;
             }
 
-            footer p {
-                font-size: 14px; /* Reduz o tamanho da fonte no rodapé para caber melhor */
+            footer {
+                font-size: 12px; /* Ajusta o tamanho da fonte no rodapé em telas pequenas */
             }
         }
     </style>
 </head>
+
 <body>
+
+    <!-- Container das logos -->
     <div class="logo-container">
         <img src="mama.png" alt="Logo da Prefeitura">
         <img src="WhatsApp Image 2023-11-23 at 11.06 (1).png" alt="Logo da Secretaria de Saúde">
     </div>
 
+    <!-- Container de login -->
     <div class="login-container">
         <h1>Login</h1>
+
+        <!-- Nova div para mensagem ou informação adicional -->
+        <div class="login-info">Por favor, insira suas credenciais para acessar o sistema.</div>
+
         <form id="loginForm">
             <div class="form-group">
                 <label for="username"><i class="fas fa-user"></i> Usuário:</label>
@@ -144,27 +177,30 @@
             </div>
             <button type="submit" class="btn">Entrar</button>
         </form>
-        <div id="error-message" class="error-message"></div>
+        <div id="error-message"></div>
     </div>
 
+    <!-- Rodapé ajustado -->
     <footer>
         <p>&copy; 2024 Prefeitura de Camocim - Secretaria de Saúde. Todos os direitos reservados. Desenvolvido por Álefim de Oliveira Silva.</p>
     </footer>
 
+    <!-- Script de validação do login -->
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Previne o comportamento padrão do formulário
+            e.preventDefault(); // Previne o envio padrão do formulário
 
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            // Verifica se as credenciais estão corretas
-            if (username === 'moacir' && password === 'camocim@25') {
-                window.location.href = 'index.html'; // Redireciona para a página de cadastro
+            // Verifica as credenciais
+            if (username === 'moacir' && password === '1234') {
+                window.location.href = 'index.html'; // Redireciona se o login for válido
             } else {
                 document.getElementById('error-message').textContent = 'Usuário ou senha incorretos!';
             }
         });
     </script>
 </body>
+
 </html>
