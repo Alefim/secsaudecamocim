@@ -109,6 +109,23 @@
             margin-top: 10px;
         }
 
+        /* Loader em forma de barra animada */
+        #loader {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #4CAF50;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none; /* Inicialmente escondido */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         /* Rodapé ajustado */
         footer {
             text-align: center;
@@ -177,6 +194,10 @@
             </div>
             <button type="submit" class="btn">Entrar</button>
         </form>
+
+        <!-- Loader animado -->
+        <div id="loader"></div>
+
         <div id="error-message"></div>
     </div>
 
@@ -193,12 +214,21 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            // Verifica as credenciais
-            if (username === 'moacir' && password === '1234') {
-                window.location.href = 'index.html'; // Redireciona se o login for válido
-            } else {
-                document.getElementById('error-message').textContent = 'Usuário ou senha incorretos!';
-            }
+            // Exibe o loader
+            document.getElementById('loader').style.display = 'block';
+
+            // Simula um pequeno delay para a validação do login (2 segundos)
+            setTimeout(function() {
+                // Verifica as credenciais
+                if (username === 'moacir' && password === '1234') {
+                    window.location.href = 'index.html'; // Redireciona se o login for válido
+                } else {
+                    document.getElementById('error-message').textContent = 'Usuário ou senha incorretos!';
+                }
+
+                // Oculta o loader após a validação
+                document.getElementById('loader').style.display = 'none';
+            }, 2000); // Simula um tempo de carregamento de 2 segundos
         });
     </script>
 </body>
