@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizar Cadastros e Marcar Viagem</title>
+    <title>Visualizar Cadastros</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="icons8-ambulância-16.ico" type="image/x-icon">
     <style>
@@ -13,7 +13,7 @@
             background-color: #f5f5f5;
         }
 
-        h1, h2 {
+        h1 {
             text-align: center;
         }
 
@@ -62,33 +62,6 @@
             background-color: #007bff;
             color: white;
         }
-
-        form {
-            margin-top: 30px;
-            text-align: center;
-        }
-
-        form input, form button {
-            padding: 10px;
-            margin: 5px;
-            border-radius: 5px;
-        }
-
-        form input {
-            border: 1px solid #ccc;
-            width: 250px;
-        }
-
-        form button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        form button:hover {
-            background-color: #218838;
-        }
     </style>
 </head>
 <body>
@@ -123,20 +96,6 @@
             <!-- Os dados serão inseridos aqui -->
         </tbody>
     </table>
-
-    <h2>Marcar Viagem</h2>
-
-    <form id="formViagem">
-        <input type="text" id="nomePaciente" placeholder="Nome do Paciente" required>
-        <input type="text" id="telefone" placeholder="Telefone" required>
-        <input type="text" id="destino" placeholder="Destino" required>
-        <input type="date" id="dataViagem" required>
-        <input type="time" id="horarioSaida" placeholder="Horário de Saída" required>
-        <input type="time" id="horarioRetorno" placeholder="Horário de Retorno" required>
-        <input type="text" id="tipoCarro" placeholder="Tipo de Carro" required>
-        <input type="text" id="motorista" placeholder="Motorista" required>
-        <button type="submit">Marcar Viagem</button>
-    </form>
 
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbx-v_Y_7FG3-wj8zBZsKCSrHhLJZwbMR6IYVqW8V_ri5zW30Lsovup_QVDKXt5m2cwT/exec';
@@ -194,47 +153,81 @@
             filtrarPorDestino();
         }
 
-        // Função para imprimir a tabela
+        // Função para imprimir somente os dados filtrados
         function imprimirTabela() {
-            window.print();
+            const filteredRows = [...document.querySelectorAll('#tabelaCadastros tbody tr')]
+                .filter(row => row.style.display !== 'none'); // Seleciona apenas as linhas visíveis
+
+            if (filteredRows.length === 0) {
+                alert('Nenhum dado filtrado para imprimir.');
+                return;
+            }
+
+            let tabelaHTML = `
+                <table border="1" style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th>Nome do Paciente</th>
+                            <th>Telefone</th>
+                            <th>Destino</th>
+                            <th>Data de Agendamento</th>
+                            <th>Horário</th>
+                            <th>Tipo de Carro</th>
+                            <th>Motorista</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            filteredRows.forEach(row => {
+                tabelaHTML += `
+                    <tr>
+                        ${row.innerHTML}
+                    </tr>
+                `;
+            });
+
+            tabelaHTML += `</tbody></table>`;
+
+            const printWindow = window.open('', '', 'width=800,height=600');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Imprimir Tabela Filtrada</title>
+                    <style>
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 20px;
+                        }
+                        th, td {
+                            padding: 10px;
+                            border: 1px solid #ccc;
+                            text-align: left;
+                        }
+                        th {
+                            background-color: #007bff;
+                            color: white;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>Cadastros Filtrados</h1>
+                    ${tabelaHTML}
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();
         }
 
-        // Função para enviar o formulário de marcação de viagem
-        document.getElementById('formViagem').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const dadosViagem = {
-                nomePaciente: document.getElementById('nomePaciente').value,
-                telefone: document.getElementById('telefone').value,
-                destino: document.getElementById('destino').value,
-                dataViagem: document.getElementById('dataViagem').value,
-                horarioSaida: document.getElementById('horarioSaida').value,
-                horarioRetorno: document.getElementById('horarioRetorno').value,
-                tipoCarro: document.getElementById('tipoCarro').value,
-                motorista: document.getElementById('motorista').value
-            };
-
-            fetch(scriptURL, {
-                method: 'POST',
-                body: JSON.stringify(dadosViagem),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-                document.getElementById('formViagem').reset();
-            })
-            .catch(error => {
-                alert('Erro ao registrar viagem: ' + error.message);
-            });
-        });
-
-        // Função para voltar para a tela de cadastro
+        // Função para voltar para a página de cadastro
         function voltarParaCadastro() {
-            window.location.href = 'index.html'; // Altere para o nome correto do arquivo de cadastro
+            window.location.href = 'index.html'; // Redireciona para a página de cadastro
         }
     </script>
+
 </body>
 </html>
