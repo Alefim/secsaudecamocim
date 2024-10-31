@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marcação de Viagem</title>
+    <title>Marcação de Retorno</title>
     <link rel="icon" href="icons8-ambulância-16.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
@@ -50,7 +50,6 @@
         }
         input[type="text"],
         input[type="date"],
-        input[type="time"],
         textarea {
             width: 100%;
             padding: 10px;
@@ -63,7 +62,6 @@
         }
         input[type="text"]:focus,
         input[type="date"]:focus,
-        input[type="time"]:focus,
         textarea:focus {
             border-color: #007bff;
             outline: none;
@@ -118,7 +116,7 @@
 <div class="splash" id="splash">Salvando...</div>
 
 <div class="container">
-    <h1>Marcação da Viagem</h1>
+    <h1>Marcação do Retorno</h1>
 
     <form id="formMarcarViagem">
         <div class="form-group">
@@ -129,12 +127,6 @@
         <div class="form-group">
             <label for="acompanhante">Acompanhante:</label>
             <input type="text" id="acompanhante" name="acompanhante" required>
-        </div>
-
-        <!-- Novo campo para Horário de Comparecimento -->
-        <div class="form-group">
-            <label for="horarioComparecimento">Horário de Comparecimento:</label>
-            <input type="time" id="horarioComparecimento" name="horarioComparecimento" required>
         </div>
 
         <div class="form-group">
@@ -168,7 +160,7 @@
         </div>
 
         <div class="form-group">
-            <label for="dataRetorno">Data da Viagem:</label>
+            <label for="dataRetorno">Data do Retorno:</label>
             <input type="date" id="dataRetorno" name="dataRetorno" required>
         </div>
 
@@ -178,13 +170,12 @@
         </div>
 
         <div class="form-group">
-            <button type="submit" class="btn">SALVAR MARCAÇÃO</button><br><br>
+            <button type="submit" class="btn">Confirmar Retorno</button><br><br>
             <a href="index.html" class="btn">Voltar para Cadastro</a><br><br>
-            <a href="marcar-retorno.html" class="btn">Marcar Retorno</a><br><br>
         </div>
 
         <div class="form-group">
-            <a href="https://docs.google.com/spreadsheets/d/1ZBkooWOEgDws103Fjse9LoWZE1kdOsFy9W4Sxzr6OHc/edit" target="_blank" class="btn btn-secondary">Abrir Planilha de Marcação</a>
+            <a href="https://docs.google.com/spreadsheets/d/1A7MAM8rAZAL6wIMTOMOECm4-uFdUixo5vckAfqkzXtc/edit" target="_blank" class="btn btn-secondary">Abrir Planilha de Retorno</a>
         </div>
 
         <div class="form-group">
@@ -201,7 +192,7 @@
         document.getElementById('splash').style.display = 'flex';
 
         const formData = new FormData(this);
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxCSSZmBrEkMirmaezDwtrvWqnsf4NsfWKTTPruF4U2sjIH-1QlclaW5GMq-BxniRTyZA/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzELvUbAdl9CdNJjhG4Yi_KmLL6DopO6cmsaf7PMUONS30denNKzIEaX-J0TukzqeKE/exec';
 
         fetch(scriptURL, { method: 'POST', body: formData })
             .then(response => response.text())
