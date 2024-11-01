@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abrir Documento Word</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Abrir Documento Word</h1>
+<p>Clique no botão abaixo para abrir o documento do Word.</p>
+
+<button onclick="abrirDocumento()">Abrir Documento Word</button>
+
+<script>
+    function abrirDocumento() {
+        // Link direto para o documento do Word no Google Drive
+        const link = 'LINK_DO_DOCUMENTO';
+        window.open(link, '_blank');
+    }
+</script>
+
+</body>
+</html>
