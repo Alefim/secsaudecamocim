@@ -246,14 +246,29 @@
     </div>
 
     <script>
-        document.getElementById('formCadastro').onsubmit = function() {
-            document.getElementById('splashScreen').style.display = 'flex';
-            setTimeout(function() {
-                alert('Cadastro realizado com sucesso!');
-                document.getElementById('splashScreen').style.display = 'none';
-            }, 2000); // Simula um tempo de carregamento
-            return false; // Impede o envio real do formulário
-        };
+      document.getElementById('formCadastro').onsubmit = function(event) {
+        event.preventDefault(); // Impede o envio padrão do formulário
+        document.getElementById('splashScreen').style.display = 'flex'; // Mostra a tela de carregamento
+        
+        // Coletando os dados do formulário
+        const formData = new FormData(event.target);
+        
+        // Enviando os dados para a planilha usando a URL do Google Apps Script
+        fetch('SUA_URL_DO_APLICATIVO_WEB', { // Substitua pela URL do seu aplicativo web
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            alert(data); // Mensagem de sucesso
+            document.getElementById('splashScreen').style.display = 'none'; // Esconde a tela de carregamento
+            event.target.reset(); // Reseta o formulário
+        })
+        .catch(error => {
+            alert('Ocorreu um erro: ' + error.message);
+            document.getElementById('splashScreen').style.display = 'none'; // Esconde a tela de carregamento
+        });
+    };
     </script>
 </body>
 </html>

@@ -3,42 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abrir Documento Word</title>
+    <title>Organizar Viagens com Filtro e Impressão</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+        /* Estilos */
+        * {
+            margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+        body {
+            background-color: #f0f0f0;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 900px;
         }
         h1 {
             text-align: center;
+            margin-bottom: 20px;
         }
-        button {
-            padding: 10px 15px;
+        .filter-group {
+            margin-bottom: 20px;
+        }
+        label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="date"] {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+        }
+        .btn {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
             border: none;
             border-radius: 5px;
-            background-color: #28a745;
-            color: white;
             cursor: pointer;
-            font-size: 16px;
-            display: block;
-            margin: 0 auto;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-<h1>Abrir Documento Word</h1>
-<p>Clique no botão abaixo para abrir o documento do Word.</p>
+<div class="container">
+    <h1>Viagens Organizadas</h1>
 
-<button onclick="abrirDocumento()">Abrir Documento Word</button>
+    <!-- Filtros -->
+    <div class="filter-group">
+        <label for="filtroDestino">Destino:</label>
+        <input type="text" id="filtroDestino" placeholder="Digite o destino">
+
+        <label for="filtroData">Data da Viagem:</label>
+        <input type="date" id="filtroData">
+
+        <label for="filtroPassageiro">Passageiro:</label>
+        <input type="text" id="filtroPassageiro" placeholder="Digite o passageiro">
+
+        <button class="btn" onclick="filtrarDados()">Filtrar</button>
+        <button class="btn" onclick="imprimirTabela()">Imprimir</button>
+    </div>
+
+    <!-- Tabela de Viagens -->
+    <table id="tabelaViagens">
+        <thead>
+            <tr>
+                <th>Passageiro</th>
+                <th>Acompanhante</th>
+                <th>Observações</th>
+                <th>Destino</th>
+                <th>Motorista</th>
+                <th>Rota</th>
+                <th>Data da Viagem</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Os dados serão preenchidos dinamicamente -->
+        </tbody>
+    </table>
+</div>
 
 <script>
-    function abrirDocumento() {
-        // Link direto para o documento do Word no Google Drive
-        const link = 'LINK_DO_DOCUMENTO';
-        window.open(link, '_blank');
+    // Função para buscar os dados cadastrados
+    async function carregarDados() {
+        try {
+            // URL do script ou API que retorna os dados (ajuste conforme necessário)
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzELvUbAdl9CdNJjhG4Yi_KmLL6DopO6cmsaf7PMUONS30denNKzIEaX-J0TukzqeKE/exec';
+            
+            const response = await fetch(scriptURL);
+            const dados = await response.json();
+
+            const tabelaBody = document.querySelector('#tabelaViagens tbody');
+            tabelaBody.innerHTML = ''; // Limpa a tabela antes de adicionar os dados
+
+            // Adiciona os dados na tabela
+            dados.forEach(item => {
+                const linha = document.createElement('tr');
+                linha.innerHTML = `
+                    <td>${item.passageiro}</td>
+                    <td>${item.acompanhante}</td>
+                    <td>${item.observacoes}</td>
+                    <td>${item.destino}</td>
+                    <td>${item.motorista}</td>
+                    <td>${item.rota}</td>
+                    <td>${item.dataViagem}</td>
+                `;
+                tabelaBody.appendChild(linha);
+            });
+        } catch (error) {
+            console.error('Erro ao carregar os dados:', error);
+        }
+    }
+
+    // Chama a função para carregar os dados ao abrir a página
+    window.onload = carregarDados;
+
+    function filtrarDados() {
+        // Obtém os valores dos filtros
+        const filtroDestino = document.getElementById('filtroDestino').value.toLowerCase();
+        const filtroData = document.getElementById('filtroData').value;
+        const filtroPassageiro = document.getElementById('filtroPassageiro').value.toLowerCase();
+
+        // Obtém todas as linhas da tabela
+        const linhas = document.querySelectorAll('#tabelaViagens tbody tr');
+
+        // Itera sobre cada linha para aplicar o filtro
+        linhas.forEach(linha => {
+            const passageiro = linha.cells[0].textContent.toLowerCase();
+            const destino = linha.cells[3].textContent.toLowerCase();
+            const data = linha.cells[6].textContent;
+
+            // Verifica se a linha corresponde aos filtros
+            const correspondeDestino = filtroDestino === '' || destino.includes(filtroDestino);
+            const correspondeData = filtroData === '' || data === filtroData;
+            const correspondePassageiro = filtroPassageiro === '' || passageiro.includes(filtroPassageiro);
+
+            // Exibe ou oculta a linha com base nos filtros
+            if (correspondeDestino && correspondeData && correspondePassageiro) {
+                linha.style.display = '';
+            } else {
+                linha.style.display = 'none';
+            }
+        });
+    }
+
+    function imprimirTabela() {
+        // Obtém todas as linhas da tabela
+        const linhas = document.querySelectorAll('#tabelaViagens tbody tr');
+
+        // Armazena as linhas que não estão visíveis
+        const linhasOcultas = [];
+
+        // Oculta as linhas que não estão visíveis
+        linhas.forEach(linha => {
+            if (linha.style.display === 'none') {
+                linhasOcultas.push(linha);
+                linha.style.display = 'none';
+            }
+        });
+
+        // Abre a caixa de diálogo de impressão
+        window.print();
+
+        // Restaura as linhas que estavam ocultas
+        linhasOcultas.forEach(linha => {
+            linha.style.display = '';
+        });
     }
 </script>
 
