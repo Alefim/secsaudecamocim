@@ -3,18 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organizar Viagens com Filtro e Impressão</title>
+    <title>Organizar Marcações</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        /* Estilos */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
-        }
+        /* Estilos básicos */
         body {
-            background-color: #f0f0f0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9f9f9;
             color: #333;
             display: flex;
             justify-content: center;
@@ -23,187 +18,138 @@
             padding: 20px;
         }
         .container {
-            background-color: white;
+            width: 100%;
+            max-width: 900px;
+            background-color: #fff;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 900px;
         }
         h1 {
             text-align: center;
             margin-bottom: 20px;
         }
-        .filter-group {
+        .filters {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 20px;
         }
-        label {
-            margin-right: 10px;
-            font-weight: bold;
-        }
-        input[type="text"],
-        input[type="date"] {
+        .filters input {
             padding: 8px;
+            width: 30%;
             border-radius: 5px;
-            border: 1px solid #ccc;
-            margin-right: 10px;
+            border: 1px solid #ddd;
         }
-        .btn {
-            padding: 8px 16px;
+        .print-btn {
             background-color: #007bff;
-            color: white;
+            color: #fff;
+            padding: 10px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            text-decoration: none;
-            margin-top: 10px;
+            transition: background-color 0.3s;
         }
-        .btn:hover {
+        .print-btn:hover {
             background-color: #0056b3;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
         }
         th, td {
+            padding: 10px;
             border: 1px solid #ddd;
-            padding: 8px;
             text-align: left;
         }
         th {
-            background-color: #f4f4f4;
-            font-weight: bold;
+            background-color: #007bff;
+            color: #fff;
         }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h1>Viagens Organizadas</h1>
-
-    <!-- Filtros -->
-    <div class="filter-group">
-        <label for="filtroDestino">Destino:</label>
-        <input type="text" id="filtroDestino" placeholder="Digite o destino">
-
-        <label for="filtroData">Data da Viagem:</label>
-        <input type="date" id="filtroData">
-
-        <label for="filtroPassageiro">Passageiro:</label>
-        <input type="text" id="filtroPassageiro" placeholder="Digite o passageiro">
-
-        <button class="btn" onclick="filtrarDados()">Filtrar</button>
-        <button class="btn" onclick="imprimirTabela()">Imprimir</button>
+    <div class="container">
+        <h1>Marcações de Viagem</h1>
+        <div class="filters">
+            <input type="text" id="filterPassageiro" placeholder="Filtrar por Passageiro">
+            <input type="text" id="filterDestino" placeholder="Filtrar por Destino">
+            <input type="date" id="filterData" placeholder="Filtrar por Data">
+            <button class="print-btn" onclick="imprimirTabela()">Imprimir</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Passageiros</th>
+                    <th>Acompanhante</th>
+                    <th>Destino</th>
+                    <th>Data</th>
+                    <th>Observações</th>
+                </tr>
+            </thead>
+            <tbody id="dadosTabela">
+                <!-- Os dados serão inseridos aqui via JavaScript -->
+            </tbody>
+        </table>
     </div>
 
-    <!-- Tabela de Viagens -->
-    <table id="tabelaViagens">
-        <thead>
-            <tr>
-                <th>Passageiro</th>
-                <th>Acompanhante</th>
-                <th>Observações</th>
-                <th>Destino</th>
-                <th>Motorista</th>
-                <th>Rota</th>
-                <th>Data da Viagem</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Os dados serão preenchidos dinamicamente -->
-        </tbody>
-    </table>
-</div>
+    <script>
+        const sheetURL = 'https://script.google.com/macros/s/AKfycbzELvUbAdl9CdNJjhG4Yi_KmLL6DopO6cmsaf7PMUONS30denNKzIEaX-J0TukzqeKE/exec';
 
-<script>
-    // Função para buscar os dados cadastrados
-    async function carregarDados() {
-        try {
-            // URL do script ou API que retorna os dados (ajuste conforme necessário)
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzELvUbAdl9CdNJjhG4Yi_KmLL6DopO6cmsaf7PMUONS30denNKzIEaX-J0TukzqeKE/exec';
-            
-            const response = await fetch(scriptURL);
-            const dados = await response.json();
+        let dados = [];
 
-            const tabelaBody = document.querySelector('#tabelaViagens tbody');
-            tabelaBody.innerHTML = ''; // Limpa a tabela antes de adicionar os dados
-
-            // Adiciona os dados na tabela
-            dados.forEach(item => {
-                const linha = document.createElement('tr');
-                linha.innerHTML = `
-                    <td>${item.passageiro}</td>
-                    <td>${item.acompanhante}</td>
-                    <td>${item.observacoes}</td>
-                    <td>${item.destino}</td>
-                    <td>${item.motorista}</td>
-                    <td>${item.rota}</td>
-                    <td>${item.dataViagem}</td>
-                `;
-                tabelaBody.appendChild(linha);
-            });
-        } catch (error) {
-            console.error('Erro ao carregar os dados:', error);
+        async function buscarDados() {
+            try {
+                const response = await fetch(sheetURL);
+                dados = await response.json();
+                exibirDados(dados);
+            } catch (error) {
+                console.error('Erro ao buscar dados:', error);
+            }
         }
-    }
 
-    // Chama a função para carregar os dados ao abrir a página
-    window.onload = carregarDados;
+        function exibirDados(data) {
+            const tbody = document.getElementById('dadosTabela');
+            tbody.innerHTML = '';
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.passageiros}</td>
+                    <td>${item.acompanhante}</td>
+                    <td>${item.destino}</td>
+                    <td>${item.dataRetorno}</td>
+                    <td>${item.observacoes}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
 
-    function filtrarDados() {
-        // Obtém os valores dos filtros
-        const filtroDestino = document.getElementById('filtroDestino').value.toLowerCase();
-        const filtroData = document.getElementById('filtroData').value;
-        const filtroPassageiro = document.getElementById('filtroPassageiro').value.toLowerCase();
+        function filtrarDados() {
+            const passageiroFiltro = document.getElementById('filterPassageiro').value.toLowerCase();
+            const destinoFiltro = document.getElementById('filterDestino').value.toLowerCase();
+            const dataFiltro = document.getElementById('filterData').value;
 
-        // Obtém todas as linhas da tabela
-        const linhas = document.querySelectorAll('#tabelaViagens tbody tr');
+            const dadosFiltrados = dados.filter(item => {
+                const passageiroMatch = item.passageiros.toLowerCase().includes(passageiroFiltro);
+                const destinoMatch = item.destino.toLowerCase().includes(destinoFiltro);
+                const dataMatch = !dataFiltro || item.dataRetorno === dataFiltro;
 
-        // Itera sobre cada linha para aplicar o filtro
-        linhas.forEach(linha => {
-            const passageiro = linha.cells[0].textContent.toLowerCase();
-            const destino = linha.cells[3].textContent.toLowerCase();
-            const data = linha.cells[6].textContent;
+                return passageiroMatch && destinoMatch && dataMatch;
+            });
 
-            // Verifica se a linha corresponde aos filtros
-            const correspondeDestino = filtroDestino === '' || destino.includes(filtroDestino);
-            const correspondeData = filtroData === '' || data === filtroData;
-            const correspondePassageiro = filtroPassageiro === '' || passageiro.includes(filtroPassageiro);
+            exibirDados(dadosFiltrados);
+        }
 
-            // Exibe ou oculta a linha com base nos filtros
-            if (correspondeDestino && correspondeData && correspondePassageiro) {
-                linha.style.display = '';
-            } else {
-                linha.style.display = 'none';
-            }
-        });
-    }
+        function imprimirTabela() {
+            window.print();
+        }
 
-    function imprimirTabela() {
-        // Obtém todas as linhas da tabela
-        const linhas = document.querySelectorAll('#tabelaViagens tbody tr');
+        // Adiciona eventos aos campos de filtro
+        document.getElementById('filterPassageiro').addEventListener('input', filtrarDados);
+        document.getElementById('filterDestino').addEventListener('input', filtrarDados);
+        document.getElementById('filterData').addEventListener('change', filtrarDados);
 
-        // Armazena as linhas que não estão visíveis
-        const linhasOcultas = [];
-
-        // Oculta as linhas que não estão visíveis
-        linhas.forEach(linha => {
-            if (linha.style.display === 'none') {
-                linhasOcultas.push(linha);
-                linha.style.display = 'none';
-            }
-        });
-
-        // Abre a caixa de diálogo de impressão
-        window.print();
-
-        // Restaura as linhas que estavam ocultas
-        linhasOcultas.forEach(linha => {
-            linha.style.display = '';
-        });
-    }
-</script>
-
+        // Chama a função ao carregar a página
+        document.addEventListener('DOMContentLoaded', buscarDados);
+    </script>
 </body>
 </html>
